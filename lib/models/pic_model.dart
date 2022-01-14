@@ -1,11 +1,13 @@
-class Pics {
-  static String tableName = 'pics';
+class Pic {
+  static String tableName = 'pic';
 
   static String tableSQL = '''
     CREATE TABLE `$tableName`
       (
-       `id_pic`   INTEGER PRIMARY KEY ,
-       `nome_pic` varchar(45) NOT NULL
+       `id_pic`   integer NOT NULL ,
+       `nome_pic` text NOT NULL ,
+      
+      PRIMARY KEY (`id_pic`)
       );
   ''';
 

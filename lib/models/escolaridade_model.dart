@@ -4,8 +4,10 @@ class Escolaridade {
   static String tableSQL = '''
     CREATE TABLE `$tableName`
       (
-        `id_escolaridade`   INTEGER PRIMARY KEY ,
-        `nome_escolaridade` varchar(45) NOT NULL
+       `id_escolaridade`   integer NOT NULL ,
+       `nome_escolaridade` text NOT NULL ,
+      
+      PRIMARY KEY (`id_escolaridade`)
       );
   ''';
 

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:vida_app/models/questionario_ansiedade_model.dart';
 
-class ResultadoQuestionarioAnsiedade extends StatelessWidget {
-  final QuestionarioAnsiedadeModel questionario;
+class ResultadoQuestionarioAnsiedadeScreen extends StatelessWidget {
+  final QuestionarioAnsiedade questionario;
 
-  ResultadoQuestionarioAnsiedade({required this.questionario, Key? key})
+  ResultadoQuestionarioAnsiedadeScreen({required this.questionario, Key? key})
       : super(key: key);
 
   @override
@@ -39,7 +39,7 @@ class ResultadoQuestionarioAnsiedade extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Text(
-                'Paciente: CLARENILDA DOS SANTOS',
+                'Paciente: ${questionario.paciente.nome}',
                 style: TextStyle(
                   fontSize: 18.0,
                   fontWeight: FontWeight.bold,
@@ -50,7 +50,7 @@ class ResultadoQuestionarioAnsiedade extends StatelessWidget {
               padding: const EdgeInsets.all(8.0),
               child: Text(
                 // Improve - add internationalization
-                'Data da aplicação: ${questionario.dataRegistroQuestionario!.day}/${questionario.dataRegistroQuestionario!.month}/${questionario.dataRegistroQuestionario!.year}',
+                'Data da aplicação: ${questionario.dataAplicacaoQuestionario!.day}/${questionario.dataAplicacaoQuestionario!.month}/${questionario.dataAplicacaoQuestionario!.year}',
                 // 'Data da aplicação: ${questionario.dataRegistroQuestionario.toString()}',
                 style: TextStyle(
                   fontSize: 18.0,
@@ -62,7 +62,7 @@ class ResultadoQuestionarioAnsiedade extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Text(
-                'SCORE: ${questionario.pontuacaoTotal.toString()}',
+                'SCORE: ${questionario.pontuacaoQuestionario.toString()}',
                 style: TextStyle(
                   fontSize: 18.0,
                   fontWeight: FontWeight.bold,
@@ -91,8 +91,7 @@ class ResultadoQuestionarioAnsiedade extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: <Widget>[
                         Expanded(
-                            child: Text(
-                                questionario.questoes[index + 1]!.descricao)),
+                            child: Text('${questionario.questoes[index + 1]!.ordemQuestaoDomain}. ${questionario.questoes[index + 1]!.descricao}')),
                         Text(questionario.questoes[index + 1]!.pontuacao
                             .toString()),
                       ],
@@ -140,9 +139,10 @@ class ResultadoQuestionarioAnsiedade extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  ElevatedButton(
+                  ElevatedButton.icon(
                     onPressed: () => Navigator.pop(context),
-                    child: Text('RETORNAR'),
+                    icon: Icon(Icons.arrow_back_rounded),
+                    label: Text('RETORNAR'),
                   ),
                   ElevatedButton.icon(
                       onPressed: () {},

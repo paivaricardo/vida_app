@@ -1,11 +1,12 @@
 import 'package:sqflite/sqflite.dart';
 import 'package:vida_app/database/app_database.dart';
-import 'package:vida_app/models/paciente_conhece_pics.dart';
+import 'package:vida_app/models/paciente_conhece_pic.dart';
 import 'package:vida_app/models/paciente_model.dart';
-import 'package:vida_app/models/pics_model.dart';
+import 'package:vida_app/models/pic_model.dart';
 
 class PacienteConhecePicsDAO {
-  static final _tableName = PacienteConhecePics.tableName;
+  static final _tableName = PacienteConhecePic.tableName;
+  static final _picTableName = Pic.tableName;
 
   Future<List<int>> saveAll(Paciente paciente) async {
     final Database db = await AppDatabase.getDatabase();
@@ -14,7 +15,7 @@ class PacienteConhecePicsDAO {
 
     paciente.quaisPicConhece.forEach((key, value) async {
       if (value == true) {
-        int returnedId = await save(paciente, Pics.getPicId(key), db);
+        int returnedId = await save(paciente, Pic.getPicId(key), db);
         returnedIds.add(returnedId);
       }
     });
@@ -31,14 +32,14 @@ class PacienteConhecePicsDAO {
   Map<String, dynamic> _toMap(Paciente paciente, int picId) {
     final Map<String, dynamic> pacienteConhecePicsMap = Map();
 
-    pacienteConhecePicsMap['id_paciente'] = paciente.id;
+    pacienteConhecePicsMap['uuid_paciente'] = paciente.uuid;
     pacienteConhecePicsMap['id_pic'] = picId;
 
     return pacienteConhecePicsMap;
 
   }
 
-  Future<Map<String, bool>> findQuaisPicsConhece(int pacienteId) async {
+  Future<Map<String, bool>> findQuaisPicsConhece(String pacienteUuid) async {
     final Database db = await AppDatabase.getDatabase();
 
     Map<String, bool> picsConhecidas = {
@@ -55,7 +56,7 @@ class PacienteConhecePicsDAO {
     // );
 
     final List<Map<String, dynamic>> result = await db.rawQuery(
-      'SELECT nome_pic FROM pics INNER JOIN paciente_conhece_pics ON pics.id_pic = paciente_conhece_pics.id_pic WHERE id_paciente = $pacienteId '
+      'SELECT nome_pic FROM $_picTableName INNER JOIN $_tableName ON $_picTableName.id_pic = $_tableName.id_pic AND uuid_paciente = \'${pacienteUuid}\' '
     );
 
     result.forEach((element) {

@@ -4,8 +4,10 @@ class Sexo {
   static String tableSQL = '''
     CREATE TABLE `$tableName`
       (
-       `id_sexo`  INTEGER PRIMARY KEY ,
-       `dsc_sexo` varchar(45) NOT NULL
+       `id_sexo`  integer NOT NULL ,
+       `dsc_sexo` text NOT NULL ,
+      
+      PRIMARY KEY (`id_sexo`)
       );
   ''';
 

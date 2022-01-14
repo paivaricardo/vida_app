@@ -4,33 +4,34 @@ class Paciente {
   static final String tableName = 'paciente';
 
   static final String tableSQL = '''
-    CREATE TABLE `paciente`
+    CREATE TABLE `$tableName`
       (
-       `id_paciente`         INTEGER PRIMARY KEY AUTOINCREMENT,
-       `nome`                varchar(140) NOT NULL ,
-       `data_nascimento`     varchar(255) NOT NULL ,
-       `id_sexo`             int NOT NULL ,
-       `id_escolaridade`     int NOT NULL ,
-       `profissao`           varchar(45) NOT NULL ,
-       `peso`                decimal(5,2) NOT NULL ,
-       `altura`              decimal(3,2) NOT NULL ,
-       `conhece_pic`         boolean NOT NULL ,
-       `apresenta_ansiedade` boolean NOT NULL ,
-       `apresenta_depressao` boolean NOT NULL ,
-       `apresenta_dor`       boolean NOT NULL ,
-       `local_dor`           varchar(140) NOT NULL ,
-       `fumante`             boolean NOT NULL ,
-       `frequencia_fumo`     varchar(45) NOT NULL ,
-       `cigarros_dia`        int NOT NULL ,
-       `faz_uso_medicamento` boolean NOT NULL ,
-       `medicamentos`        varchar(250) NOT NULL ,
+       `uuid_paciente`       text NOT NULL ,
+       `nome`                text NOT NULL ,
+       `data_nascimento`     text NOT NULL ,
+       `id_escolaridade`     integer NOT NULL ,
+       `id_sexo`             integer NOT NULL ,
+       `profissao`           text NOT NULL ,
+       `altura`              real NOT NULL ,
+       `peso`                real NOT NULL ,
+       `conhece_pic`         text NOT NULL ,
+       `apresenta_ansiedade` text NOT NULL ,
+       `apresenta_depressao` text NOT NULL ,
+       `apresenta_dor`       text NOT NULL ,
+       `local_dor`           text NOT NULL ,
+       `fumante`             text NOT NULL ,
+       `frequencia_fumo`     text NOT NULL ,
+       `cigarros_dia`        integer NOT NULL ,
+       `faz_uso_medicamento` text NOT NULL ,
+       `medicamentos`        text NOT NULL ,
       
-        FOREIGN KEY (`id_escolaridade`) REFERENCES `escolaridade` (`id_escolaridade`),
-        FOREIGN KEY (`id_sexo`) REFERENCES `sexo` (`id_sexo`)
+      PRIMARY KEY (`uuid_paciente`),
+      FOREIGN KEY (`id_escolaridade`) REFERENCES `escolaridade` (`id_escolaridade`),
+      FOREIGN KEY (`id_sexo`) REFERENCES `sexo` (`id_sexo`)
       );
   ''';
 
-  int? id;
+  String? uuid;
   String nome;
   DateTime dataNascimento;
   String sexo;
@@ -51,7 +52,7 @@ class Paciente {
   String medicamentos;
 
   Paciente(
-      {this.id,
+      {this.uuid,
       required this.nome,
       required this.dataNascimento,
       required this.sexo,
@@ -77,6 +78,6 @@ class Paciente {
 
   @override
   String toString() {
-    return 'Paciente{nome: $nome, dataNascimento: $dataNascimento, sexo: $sexo, escolaridade: $escolaridade, profissao: $profissao, pesoAtual: $pesoAtual, altura: $altura, conhecePic: $conhecePic, quaisPicConhece: $quaisPicConhece, apresentaAnsiedade: $apresentaAnsiedade, apresentaDepressao: $apresentaDepressao, apresentaDor: $apresentaDor, localDor: $localDor, fumante: $fumante, frequenciaFumo: $frequenciaFumo, cigarrosDia: $cigarrosDia, fazUsoMedicamento: $fazUsoMedicamento, medicamento: $medicamentos}';
+    return 'Paciente{uuid: $uuid, nome: $nome, dataNascimento: $dataNascimento, sexo: $sexo, escolaridade: $escolaridade, profissao: $profissao, pesoAtual: $pesoAtual, altura: $altura, conhecePic: $conhecePic, quaisPicConhece: $quaisPicConhece, apresentaAnsiedade: $apresentaAnsiedade, apresentaDepressao: $apresentaDepressao, apresentaDor: $apresentaDor, localDor: $localDor, fumante: $fumante, frequenciaFumo: $frequenciaFumo, cigarrosDia: $cigarrosDia, fazUsoMedicamento: $fazUsoMedicamento, medicamentos: $medicamentos}';
   }
 }

@@ -7,6 +7,8 @@ import 'package:vida_app/models/sexo_model.dart';
 
 class PacienteDAO {
   static final _tableName = Paciente.tableName;
+
+  // Registrar na tabela associativa as PICs que o paciente conhece
   final PacienteConhecePicsDAO _pacienteConhecePicsDAO =
       PacienteConhecePicsDAO();
 
@@ -16,9 +18,22 @@ class PacienteDAO {
     return pacientes;
   }
 
+  Future<List<Paciente>> findAllOrdered() async {
+    final Database db = await AppDatabase.getDatabase();
+    List<Paciente> pacientes = await _toList(db);
+
+    pacientes.sort((a, b) => a.nome.compareTo(b.nome));
+
+    return pacientes;
+  }
+
   Future<int> save(Paciente paciente) async {
     final Database db = await AppDatabase.getDatabase();
+    final PacienteConhecePicsDAO _pacienteConhecePicsDAO = PacienteConhecePicsDAO();
+
     Map<String, dynamic> pacienteMap = _toMap(paciente);
+
+    await _pacienteConhecePicsDAO.saveAll(paciente);
 
     return db.insert(_tableName, pacienteMap);
   }
@@ -26,6 +41,7 @@ class PacienteDAO {
   Map<String, dynamic> _toMap(Paciente paciente) {
     final Map<String, dynamic> pacienteMap = Map();
 
+    pacienteMap['uuid_paciente'] = paciente.uuid;
     pacienteMap['nome'] = paciente.nome;
     pacienteMap['data_nascimento'] = paciente.dataNascimento.toString();
     pacienteMap['profissao'] = paciente.profissao;
@@ -53,13 +69,13 @@ class PacienteDAO {
     List<Paciente> listaPacientes = [];
 
     await Future.wait(result.map((row) async {
-      int idPaciente = int.parse(row['id_paciente'].toString());
+      String uuidPaciente = row['uuid_paciente'].toString();
 
       Map<String, bool> quaisPicConhece =
-          await _pacienteConhecePicsDAO.findQuaisPicsConhece(idPaciente);
+          await _pacienteConhecePicsDAO.findQuaisPicsConhece(uuidPaciente);
 
       Paciente retrievedPaciente = Paciente(
-        id: int.parse(row['id_paciente'].toString()),
+        uuid: row['uuid_paciente'],
         nome: row['nome'],
         dataNascimento: DateTime.parse(row['data_nascimento'].toString()),
         sexo: Sexo.getSexoValue(int.parse(row['id_sexo'].toString())),

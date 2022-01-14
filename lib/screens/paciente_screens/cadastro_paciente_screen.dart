@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:uuid/uuid.dart';
 import 'package:vida_app/database/dao/paciente_conhece_pics_dao.dart';
 import 'package:vida_app/database/dao/paciente_dao.dart';
 import 'package:vida_app/models/paciente_model.dart';
@@ -15,12 +16,16 @@ class CadastroPacienteScreen extends StatefulWidget {
 
 class _CadastroPacienteScreenState extends State<CadastroPacienteScreen>
     with InputValidationMixin {
+  // Uuid do paciente
+  var generatedUuid = Uuid().v4();
+
   // Form key
   final _formKey = GlobalKey<FormState>();
 
   // DAOs
   final PacienteDAO _pacienteDAO = PacienteDAO();
-  final PacienteConhecePicsDAO _pacienteConhecePicsDAO = PacienteConhecePicsDAO();
+  final PacienteConhecePicsDAO _pacienteConhecePicsDAO =
+      PacienteConhecePicsDAO();
 
   // Member variables
   String? radioValueSexo = 'M';
@@ -80,24 +85,6 @@ class _CadastroPacienteScreenState extends State<CadastroPacienteScreen>
   final _controllerLocalDor = TextEditingController();
   final _controllerCigarrosDia = TextEditingController();
   final _controllerMedicamento = TextEditingController();
-
-  // Model fields
-  // String nome;
-  // DateTime dataNascimento;
-  // String sexo;
-  // String escolaridade;
-  // String profissao;
-  // double pesoAtual;
-  // double altura;
-  // bool conhecePic;
-  // String? qualPicConhece;
-  // String? problemasApresentados;
-  // String? localDor;
-  // bool fumante;
-  // String frequenciaFumo;
-  // int cigarrosDia;
-  // bool fazUsoMedicamento;
-  // String? medicamento;
 
   @override
   Widget build(BuildContext context) {
@@ -188,8 +175,6 @@ class _CadastroPacienteScreenState extends State<CadastroPacienteScreen>
                         value: 'M',
                         groupValue: radioValueSexo,
                         onChanged: (String? value) {
-                          print(value);
-
                           setState(() {
                             radioValueSexo = value;
                           });
@@ -529,7 +514,8 @@ class _CadastroPacienteScreenState extends State<CadastroPacienteScreen>
                     if (_formKey.currentState!.validate()) {
                       try {
                         Paciente pacienteCreated = Paciente(
-                          nome: _controllerNome.text,
+                          uuid: generatedUuid,
+                          nome: _controllerNome.text.toUpperCase(),
                           dataNascimento: DateTime(
                             int.parse(_controllerAnoNascimento.text),
                             int.parse(_controllerMesNascimento.text),
@@ -568,14 +554,17 @@ class _CadastroPacienteScreenState extends State<CadastroPacienteScreen>
                               : _controllerMedicamento.text,
                         );
 
-                        int idNovoPaciente = await _pacienteDAO.save(pacienteCreated).timeout(Duration(seconds: 5), onTimeout: () { throw TimeoutException('Tempo limite excedido para cadastro de paciente'); });
-                        print('Novo id: $idNovoPaciente');
-                        pacienteCreated.id = idNovoPaciente;
-
-                        _pacienteConhecePicsDAO.saveAll(pacienteCreated);
+                        await _pacienteDAO
+                            .save(pacienteCreated)
+                            .timeout(Duration(seconds: 5), onTimeout: () {
+                          throw TimeoutException(
+                              'Tempo limite excedido para cadastro de paciente');
+                        });
 
                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                             content: Text('Paciente cadastrado com sucesso!')));
+
+                        Navigator.pop(context);
                       } catch (error) {
                         debugPrint(error.toString());
 
@@ -583,6 +572,10 @@ class _CadastroPacienteScreenState extends State<CadastroPacienteScreen>
                             content: Text(
                                 'Houve um erro desconhecido ao cadastrar o paciente.')));
                       }
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          content: Text(
+                              'Alguns campos foram preenchidos com dados inválidos ou faltantes. Verifique os campos e tente o cadastro novamente.')));
                     }
                   },
                   icon: Icon(Icons.save),

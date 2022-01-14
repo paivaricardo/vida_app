@@ -8,6 +8,7 @@ import 'package:vida_app/models/paciente_model.dart';
 import 'package:vida_app/models/sexo_model.dart';
 import 'package:vida_app/screens/lista_questionarios_screen.dart';
 import 'package:vida_app/screens/paciente_screens/cadastro_paciente_screen.dart';
+import 'package:vida_app/screens/paciente_screens/lista_pacientes_screen.dart';
 
 void main() async {
   runApp(const VidaApp());
@@ -29,9 +30,13 @@ void main() async {
   //   print('$key : $value');
   // });
 
-  // (await PacienteDAO().findAll()).forEach((paciente) {
-  //   debugPrint(paciente.toString());
-  // });
+  (await PacienteDAO().findAll()).forEach((paciente) {
+    debugPrint(paciente.toString());
+  });
+
+  (await db.query('questionario_ansiedade')).forEach((row) { print(row.values); });
+  (await db.query('questionario_aplicado')).forEach((row) { print(row.values); });
+  (await db.query('questao_questionario_aplicada')).forEach((row) { print(row.values); });
 }
 
 class VidaApp extends StatelessWidget {
@@ -54,7 +59,7 @@ class VidaApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.deepPurple,
       ),
-      home: CadastroPacienteScreen(),
+      home: ListaPacientesScreen(),
     );
   }
 }

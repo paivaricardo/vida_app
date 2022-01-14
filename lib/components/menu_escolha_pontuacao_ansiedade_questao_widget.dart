@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:vida_app/models/numeric_score_question_model.dart';
+import 'package:vida_app/models/questao_model.dart';
 
 // Menu options:
 // <String>[
@@ -11,7 +11,7 @@ import 'package:vida_app/models/numeric_score_question_model.dart';
 class MenuEscolhaPontuacaoQuestaoWidget extends StatefulWidget {
   final String opcaoInicial;
   final List<String> opcoesMenu;
-  NumericScoreAnsiedadeQuestion questao;
+  Questao questao;
 
   MenuEscolhaPontuacaoQuestaoWidget({
     required String this.opcaoInicial,
