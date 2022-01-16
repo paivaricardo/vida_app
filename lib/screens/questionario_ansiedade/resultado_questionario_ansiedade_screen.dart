@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:vida_app/helpers/datetime_helper.dart';
 import 'package:vida_app/models/questionario_ansiedade_model.dart';
 
 class ResultadoQuestionarioAnsiedadeScreen extends StatelessWidget {
@@ -50,7 +51,7 @@ class ResultadoQuestionarioAnsiedadeScreen extends StatelessWidget {
               padding: const EdgeInsets.all(8.0),
               child: Text(
                 // Improve - add internationalization
-                'Data da aplicação: ${questionario.dataAplicacaoQuestionario!.day}/${questionario.dataAplicacaoQuestionario!.month}/${questionario.dataAplicacaoQuestionario!.year}',
+                'Data da aplicação: ${DateTimeHelper.retriedFormattedDateStringBR(questionario.dataRealizacao)}',
                 // 'Data da aplicação: ${questionario.dataRegistroQuestionario.toString()}',
                 style: TextStyle(
                   fontSize: 18.0,

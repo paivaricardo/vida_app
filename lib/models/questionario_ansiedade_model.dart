@@ -37,21 +37,30 @@ class QuestionarioAnsiedade extends Questionario {
 
   QuestionarioAnsiedade({paciente}) : super(idQuestionarioDomain: idQuestionarioAnsiedadeDomain, paciente: paciente);
 
+  QuestionarioAnsiedade.buildFromQuestionario(Questionario questionario) :
+        interpretacaoScoreBAI = gerarInterpretacaoScoreBAI(questionario.pontuacaoQuestionario),
+      super.buildFromQuestionario(questionario);
+
+
   late Map<int, Questao> questoes = Map<int, Questao>.fromIterable(
       List.generate(QuestaoQuestionarioDomain.questionarioAnsiedadeQuestoesValues.length, (index) => index + 1),
       key: (item) => int.parse(item.toString()),
       value: (item) => Questao(this, int.parse(item.toString())));
 
-  void registrarInterpretacaoScoreBAI(int pontuacaoTotal) {
+  static String gerarInterpretacaoScoreBAI(int pontuacaoTotal) {
     if (pontuacaoTotal <= 7) {
-      interpretacaoScoreBAI = 'Grau mínimo de ansiedade';
+      return 'Grau mínimo de ansiedade';
     } else if (pontuacaoTotal <= 15) {
-      interpretacaoScoreBAI = 'Ansiedade leve';
+      return 'Ansiedade leve';
     } else if (pontuacaoTotal <= 25) {
-      interpretacaoScoreBAI = 'Ansiedade moderada';
+      return 'Ansiedade moderada';
     } else {
-      interpretacaoScoreBAI = 'Ansiedade grave';
+      return 'Ansiedade grave';
     }
+  }
+
+  void registrarInterpretacaoScoreBAI(int pontuacaoTotal) {
+    interpretacaoScoreBAI = gerarInterpretacaoScoreBAI(pontuacaoTotal);
   }
 
   @override

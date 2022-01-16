@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:vida_app/models/paciente_model.dart';
+import 'package:vida_app/screens/historico_screen/historico_paciente_main_screen.dart';
 import 'package:vida_app/screens/lista_questionarios_screen.dart';
 
 class AcoesPacienteScreen extends StatelessWidget {
@@ -41,9 +42,7 @@ class AcoesPacienteScreen extends StatelessWidget {
                 leading: Icon(Icons.list_alt_rounded),
                 title: Text('Visualizar histórico'),
                 onTap: () {
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                      content:
-                      Text('Funcionalidade a ser implentada futuramente.')));
+                  Navigator.of(context).push(MaterialPageRoute(builder: (context) => HistoricoPacienteMainScreen(paciente: paciente)));
                 },
               ),
             ),            Card(

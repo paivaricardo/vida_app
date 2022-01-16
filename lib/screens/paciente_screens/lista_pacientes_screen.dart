@@ -35,11 +35,25 @@ class _ListaPacientesScreenState extends State<ListaPacientesScreen> {
                 message: 'Carregando dados de pacientes',
               );
             case ConnectionState.done:
-              final List<Paciente> pacientes = snapshot.data as List<Paciente>;
+              if (snapshot.data != null) {
+                final List<Paciente> pacientes =
+                    snapshot.data as List<Paciente>;
 
-              return AlphabetScrollPagePacientes(
-                listPacientes: pacientes,
+                if (pacientes.isEmpty) {
+                  return Center(
+                    child: Text('Não há pacientes cadastrados ainda!'),
+                  );
+                }
+
+                return AlphabetScrollPagePacientes(
+                  listPacientes: pacientes,
+                );
+              }
+
+              return Center(
+                child: Text('Não há pacientes cadastrados ainda!'),
               );
+
             default:
               return Center(
                 child: Text('Ocorreu um erro desconhecido na aplicação.'),
@@ -49,9 +63,11 @@ class _ListaPacientesScreenState extends State<ListaPacientesScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => CadastroPacienteScreen(),
-          )).then((value) => setState(() {}));
+          Navigator.of(context)
+              .push(MaterialPageRoute(
+                builder: (context) => CadastroPacienteScreen(),
+              ))
+              .then((value) => setState(() {}));
         },
         tooltip: 'Cadastrar novo paciente',
         child: Icon(Icons.add),

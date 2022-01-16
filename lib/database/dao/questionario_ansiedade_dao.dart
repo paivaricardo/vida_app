@@ -43,4 +43,29 @@ class QuestionarioAnsiedadeDAO {
     return questionarioAnsiedadeMap;
   }
 
+  Future<QuestionarioAnsiedade> retrieveQuestionarioAnsiedade(Questionario questionario) async {
+    final Database db = await AppDatabase.getDatabase();
+    final QuestaoDAO _questaoDAO = QuestaoDAO();
+
+    final List<Map<String, dynamic>> result = await db.rawQuery(
+        'SELECT * FROM $_tableName WHERE uuid_questionario_aplicado = \'${questionario.uuidQuestionarioAplicado}\'');
+
+    QuestionarioAnsiedade retrievedQuestionarioAnsiedade = QuestionarioAnsiedade.buildFromQuestionario(questionario);
+
+    retrievedQuestionarioAnsiedade.questoes = await _questaoDAO.retrieveQuestoes(questionario, db);
+
+    Map<String, dynamic> row = result[0];
+
+    retrievedQuestionarioAnsiedade.possuiDiagnosticoAnsiedade = row['possui_diagnostico_ansiedade'].toString();
+    retrievedQuestionarioAnsiedade.desdeQuandoPossuiDiag = row['desde_quando_possui_diag'] == null ? DateTime.parse(row['desde_quando_possui_diag'].toString()) : null;
+    retrievedQuestionarioAnsiedade.jaEncontraTratamento = row['ja_encontra_tratamento'].toString() == 'true';
+    retrievedQuestionarioAnsiedade.tempoTratamento = row['tempo_tratamento'];
+    retrievedQuestionarioAnsiedade.tratamentoAtualAnsiedade = row['tratamento_atual_ansiedade'];
+    retrievedQuestionarioAnsiedade.tratamentosPreviosAnsiedade = row['tratamentos_previos_ansiedade'];
+
+    return retrievedQuestionarioAnsiedade;
+
+  }
+
+
 }

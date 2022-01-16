@@ -293,7 +293,7 @@ class _QuestionarioAnsiedadeScreenState
                                 .uuidQuestionarioAplicado = generatedUuid;
 
                             questionarioAnsiedadeAplicado
-                                .dataAplicacaoQuestionario = DateTime.now();
+                                .dataRealizacao = DateTime.now();
 
                             questionarioAnsiedadeAplicado
                                 .pontuacaoQuestionario =

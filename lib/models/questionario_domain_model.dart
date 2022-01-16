@@ -29,6 +29,15 @@ class QuestionarioDomain {
     tabagismoFargestromDomainValue: ['Tabagismo', 'TESTE DE FARGESTRÖM.'],
   };
 
+  static Map<int, bool> visibleScores = {
+    ansiedadeBAIDomainValue: true,
+    depressaoPHP9DomainValue: true,
+    depressaoBeckDomainValue: true,
+    dorInventarioDomainValue: false,
+    dorStartDomainValue: true,
+    tabagismoFargestromDomainValue: true,
+  };
+
   static String prepSQLStringInsertInitialValues = questionarioDomainValues.entries.fold(
       'INSERT INTO $tableName (id_questionario_domain, tipo_questionario, nome_questionario) VALUES ',
           (previousValue, element) =>
@@ -47,4 +56,9 @@ class QuestionarioDomain {
   // static String getQuestionarioDomainValue(int questionarioId) {
   //   return questionarioValues[questionarioId]!;
   // }
+
+  static List<String> retriveNomeQuestionario(int idQuestionarioDomain) {
+    return questionarioDomainValues[idQuestionarioDomain] ?? ['Não encontrado', 'Não encontrado'];
+  }
+
 }

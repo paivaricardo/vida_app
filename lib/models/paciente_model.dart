@@ -24,6 +24,7 @@ class Paciente {
        `cigarros_dia`        integer NOT NULL ,
        `faz_uso_medicamento` text NOT NULL ,
        `medicamentos`        text NOT NULL ,
+       `ic_active`           integer DEFAULT 1 ,
       
       PRIMARY KEY (`uuid_paciente`),
       FOREIGN KEY (`id_escolaridade`) REFERENCES `escolaridade` (`id_escolaridade`),
