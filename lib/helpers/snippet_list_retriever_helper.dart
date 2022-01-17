@@ -1,4 +1,4 @@
-import 'package:vida_app/database/dao/questionario_dao.dart';
+import 'package:vida_app/local_database/dao/questionario_dao.dart';
 import 'package:vida_app/models/paciente_model.dart';
 import 'package:vida_app/models/questionario_model.dart';
 

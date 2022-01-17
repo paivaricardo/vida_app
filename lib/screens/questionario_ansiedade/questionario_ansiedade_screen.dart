@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:uuid/uuid.dart';
 import 'package:vida_app/components/menu_escolha_pontuacao_ansiedade_questao_widget.dart';
-import 'package:vida_app/database/dao/questionario_ansiedade_dao.dart';
+import 'package:vida_app/local_database/dao/questionario_ansiedade_dao.dart';
 import 'package:vida_app/models/paciente_model.dart';
 import 'package:vida_app/models/questionario_ansiedade_model.dart';
 import 'package:vida_app/models/questionario_model.dart';

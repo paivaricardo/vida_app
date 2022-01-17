@@ -1,5 +1,5 @@
 import 'package:sqflite/sqflite.dart';
-import 'package:vida_app/database/app_database.dart';
+import 'package:vida_app/local_database/app_database.dart';
 import 'package:vida_app/models/paciente_conhece_pic.dart';
 import 'package:vida_app/models/paciente_model.dart';
 import 'package:vida_app/models/pic_model.dart';

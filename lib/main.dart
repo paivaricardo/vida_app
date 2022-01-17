@@ -1,42 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:sqflite/sqflite.dart';
-import 'package:vida_app/database/app_database.dart';
-import 'package:vida_app/database/dao/paciente_conhece_pics_dao.dart';
-import 'package:vida_app/database/dao/paciente_dao.dart';
-import 'package:vida_app/models/escolaridade_model.dart';
-import 'package:vida_app/models/paciente_model.dart';
-import 'package:vida_app/models/sexo_model.dart';
-import 'package:vida_app/screens/lista_questionarios_screen.dart';
-import 'package:vida_app/screens/paciente_screens/cadastro_paciente_screen.dart';
-import 'package:vida_app/screens/paciente_screens/lista_pacientes_screen.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:vida_app/screens/login_screens/login_screen.dart';
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // Initialize Firebase
+  await Firebase.initializeApp();
+
   runApp(const VidaApp());
 
-  final Database db = await AppDatabase.getDatabase();
-
-  // Debug
-  // Show all tables from the database
-  // (await db.query('sqlite_master', columns: ['type', 'name'])).forEach((row) {
-  //   print(row.values);
-  // });
-
-  // (await db.query('paciente_conhece_pics')).forEach((row) {
-  //   print(row.values);
-  // });
-  //
-  // (await PacienteConhecePicsDAO().findQuaisPicsConhece(1))
-  //     .forEach((key, value) {
-  //   print('$key : $value');
-  // });
-
-  (await PacienteDAO().findAll()).forEach((paciente) {
-    debugPrint(paciente.toString());
-  });
-
-  (await db.query('questionario_ansiedade')).forEach((row) { print(row.values); });
-  (await db.query('questionario_aplicado')).forEach((row) { print(row.values); });
-  (await db.query('questao_questionario_aplicada')).forEach((row) { print(row.values); });
 }
 
 class VidaApp extends StatelessWidget {
@@ -57,9 +30,9 @@ class VidaApp extends StatelessWidget {
         // or simply save your changes to "hot reload" in a Flutter IDE).
         // Notice that the counter didn't reset back to zero; the application
         // is not restarted.
-        primarySwatch: Colors.deepPurple,
+        primarySwatch: Colors.purple,
       ),
-      home: ListaPacientesScreen(),
+      home: LoginScreen(),
     );
   }
 }

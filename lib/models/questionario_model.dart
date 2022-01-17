@@ -34,8 +34,8 @@ class Questionario {
 
   Questionario({required this.idQuestionarioDomain, required this.paciente});
 
-  Questionario.buildFromQuestionario(Questionario questionario) :
-        uuidQuestionarioAplicado = questionario.uuidQuestionarioAplicado,
+  Questionario.buildFromQuestionario(Questionario questionario)
+      : uuidQuestionarioAplicado = questionario.uuidQuestionarioAplicado,
         dataRealizacao = questionario.dataRealizacao,
         idQuestionarioDomain = questionario.idQuestionarioDomain,
         paciente = questionario.paciente,
@@ -43,53 +43,64 @@ class Questionario {
         uuidPesquisador = questionario.uuidPesquisador;
 
   Widget buildSnippet(BuildContext context) {
-    return InkWell(
-      child: Card(
-        child: SizedBox(
-          height: 130,
-          child: Row(
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Icon(Icons.list_alt_rounded),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Questionário',
-                      style: TextStyle(
-                        fontSize: 20.0,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    Text(
-                      QuestionarioDomain.retriveNomeQuestionario(
-                          idQuestionarioDomain)[0],
-                      style: TextStyle(
-                        fontSize: 16.0,
-                        fontStyle: FontStyle.italic,
-                      ),
-                    ),
-                    Text(
-                      QuestionarioDomain.retriveNomeQuestionario(
-                          idQuestionarioDomain)[1],
-                      style: TextStyle(color: Colors.grey),
-                    ),
-                    Visibility(visible: QuestionarioDomain.visibleScores[idQuestionarioDomain]!,child: Text('Score: ${pontuacaoQuestionario}', style: TextStyle(fontSize: 16.0, color: Colors.deepOrange),)),
-                    Text(
-                        'Data: ${DateTimeHelper.retriedFormattedDateStringBR(dataRealizacao)}'),
-                    Text('Id.: ${uuidQuestionarioAplicado}'),
-                  ],
+    return Card(
+      child: Material(
+        child: InkWell(
+          onTap: () async =>
+              await QuestionarioRedirectHelper.redirectQuestionario(
+                  this, context),
+          child: SizedBox(
+            height: 130,
+            child: Row(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Icon(Icons.list_alt_rounded),
                 ),
-              )
-            ],
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Questionário',
+                        style: TextStyle(
+                          fontSize: 20.0,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      Text(
+                        QuestionarioDomain.retriveNomeQuestionario(
+                            idQuestionarioDomain)[0],
+                        style: TextStyle(
+                          fontSize: 16.0,
+                          fontStyle: FontStyle.italic,
+                        ),
+                      ),
+                      Text(
+                        QuestionarioDomain.retriveNomeQuestionario(
+                            idQuestionarioDomain)[1],
+                        style: TextStyle(color: Colors.grey),
+                      ),
+                      Visibility(
+                          visible: QuestionarioDomain
+                              .visibleScores[idQuestionarioDomain]!,
+                          child: Text(
+                            'Score: ${pontuacaoQuestionario}',
+                            style: TextStyle(
+                                fontSize: 16.0, color: Colors.deepOrange),
+                          )),
+                      Text(
+                          'Data: ${DateTimeHelper.retriedFormattedDateStringBR(dataRealizacao)}'),
+                      Text('Id.: ${uuidQuestionarioAplicado}'),
+                    ],
+                  ),
+                )
+              ],
+            ),
           ),
         ),
       ),
-      onTap: () async => await QuestionarioRedirectHelper.redirectQuestionario(this, context),
     );
   }
 }

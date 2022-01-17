@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:vida_app/components/alphabet_scroll_page_pacientes.dart';
 import 'package:vida_app/components/progress.dart';
-import 'package:vida_app/database/dao/paciente_dao.dart';
+import 'package:vida_app/local_database/dao/paciente_dao.dart';
 import 'package:vida_app/models/paciente_model.dart';
 import 'package:vida_app/screens/paciente_screens/cadastro_paciente_screen.dart';
 

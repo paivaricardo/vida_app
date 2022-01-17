@@ -1,6 +1,6 @@
 import 'package:sqflite/sqflite.dart';
-import 'package:vida_app/database/app_database.dart';
-import 'package:vida_app/database/dao/paciente_conhece_pics_dao.dart';
+import 'package:vida_app/local_database/app_database.dart';
+import 'package:vida_app/local_database/dao/paciente_conhece_pics_dao.dart';
 import 'package:vida_app/models/paciente_model.dart';
 import 'package:vida_app/models/escolaridade_model.dart';
 import 'package:vida_app/models/sexo_model.dart';

@@ -2,7 +2,7 @@ import 'dart:core';
 import 'dart:core';
 
 import 'package:sqflite/sqflite.dart';
-import 'package:vida_app/database/app_database.dart';
+import 'package:vida_app/local_database/app_database.dart';
 import 'package:vida_app/models/paciente_model.dart';
 import 'package:vida_app/models/questao_model.dart';
 import 'package:vida_app/models/questionario_ansiedade_model.dart';

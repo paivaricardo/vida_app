@@ -3,8 +3,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:uuid/uuid.dart';
-import 'package:vida_app/database/dao/paciente_conhece_pics_dao.dart';
-import 'package:vida_app/database/dao/paciente_dao.dart';
+import 'package:vida_app/local_database/dao/paciente_conhece_pics_dao.dart';
+import 'package:vida_app/local_database/dao/paciente_dao.dart';
 import 'package:vida_app/models/paciente_model.dart';
 
 class CadastroPacienteScreen extends StatefulWidget {
