@@ -15,7 +15,7 @@ class TipoInstiuicaoDomain {
     1: 'Instituição de Ensino Superior',
     2: 'Unidade de Saúde',
     3: 'Centro de Pesquisa',
-    4: 'Outro Órgão Governamental',
+    4: 'Outro órgão governamental',
     5: 'Outro',
   };
 
@@ -28,13 +28,13 @@ class TipoInstiuicaoDomain {
       .substring(0, prepSQLStringInsertInitialValues.length - 2) +
       ';';
 
-  static int getTipoInstituicaoId(String sexoValue) {
+  static int getTipoInstituicaoId(String instituicaoValue) {
     return tipoInstituicaoValues.entries
-        .firstWhere((element) => element.value == sexoValue)
+        .firstWhere((element) => element.value == instituicaoValue)
         .key;
   }
 
-  static String getTipoInstituicaoValue(int sexoId) {
-    return tipoInstituicaoValues[sexoId]!;
+  static String getTipoInstituicaoValue(int instituicaoId) {
+    return tipoInstituicaoValues[instituicaoId]!;
   }
 }

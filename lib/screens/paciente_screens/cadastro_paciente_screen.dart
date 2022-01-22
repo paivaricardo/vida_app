@@ -112,7 +112,7 @@ class _CadastroPacienteScreenState extends State<CadastroPacienteScreen>
           decoration: InputDecoration(
             labelText: 'Nome completo',
           ),
-          maxLength: 140,
+          maxLength: 150,
           validator: constructValidator(validarNome, 'Digite um nome'),
           controller: _controllerNome,
         ),
@@ -247,7 +247,7 @@ class _CadastroPacienteScreenState extends State<CadastroPacienteScreen>
           child: DropdownButton<String>(
             value: escolaridade,
             isExpanded: true,
-            icon: const Icon(Icons.arrow_downward),
+            icon: const Icon(Icons.arrow_downward_rounded),
             elevation: 16,
             style: const TextStyle(color: Colors.deepPurple),
             underline: Container(
@@ -442,7 +442,7 @@ class _CadastroPacienteScreenState extends State<CadastroPacienteScreen>
               Container(
                 child: DropdownButton<String>(
                   value: frequenciaFumo,
-                  icon: const Icon(Icons.arrow_downward),
+                  icon: const Icon(Icons.arrow_downward_rounded),
                   elevation: 16,
                   style: const TextStyle(color: Colors.deepPurple),
                   underline: Container(
