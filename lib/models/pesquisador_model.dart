@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:vida_app/helpers/password_generate.dart';
 import 'package:vida_app/models/instituicao_model.dart';
 
 class Pesquisador {
@@ -70,8 +69,13 @@ class Pesquisador {
       )
   ;
 
-  static Future<Pesquisador> getPesquisadorfromCredential(UserCredential credential) async {
-     Pesquisador pesquisador = await FirebaseFirestore.instance.collection(firestoreCollectionName).limit(1).where('emailPesquisador', isEqualTo: credential.user!.email).get().then((QuerySnapshot snapshot) => Pesquisador.fromJson(snapshot.docs[0].data() as Map<String, dynamic>));
+  static Future<Pesquisador?> getPesquisadorfromFirebaseAuthUser(User? user) async {
+
+    if (user == null) {
+      return null;
+    }
+
+     Pesquisador? pesquisador = await FirebaseFirestore.instance.collection(firestoreCollectionName).limit(1).where('emailPesquisador', isEqualTo: user.email).get().then((QuerySnapshot snapshot) => Pesquisador.fromJson(snapshot.docs[0].data() as Map<String, dynamic>));
 
     return pesquisador;
 
@@ -93,6 +97,7 @@ class Pesquisador {
   }
 
   Future<void> firestoreAdd() {
+
     CollectionReference pesquisadores = FirebaseFirestore.instance.collection(firestoreCollectionName);
 
     return pesquisadores.doc(uuidPesquisador).set(toJson());
@@ -109,4 +114,8 @@ class Pesquisador {
 
   }
 
+  @override
+  String toString() {
+    return 'Pesquisador: {uuidPesquisador: $uuidPesquisador, nomePesquisador: $nomePesquisador, uuidInstituicao: $uuidInstituicao, cpfPesquisador: $cpfPesquisador, cargoPesquisador: $cargoPesquisador, emailPesquisador: $emailPesquisador, idPerfilUtilizador: $idPerfilUtilizador, icActive: $icActive, icAuthorized: $icAuthorized, firstAccess: $firstAccess, instituicaoInstance: $instituicaoInstance}';
+  }
 }

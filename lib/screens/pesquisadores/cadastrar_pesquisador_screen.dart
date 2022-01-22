@@ -270,6 +270,8 @@ class _CadastrarPesquisadorScreenState extends State<CadastrarPesquisadorScreen>
       } on FirebaseAuthException catch (e) {
         _showCustomDialog('ERRO: o e-mail informado já está cadastrado!');
       } catch (e) {
+        print(e);
+
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: Text(
                 'Houve um erro desconhecido ao cadastrar o pesquisador: $e')));

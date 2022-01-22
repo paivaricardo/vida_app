@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:vida_app/components/gradient_text.dart';
@@ -22,6 +24,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
   // Mensagem de erro de login - visualizar
   bool loginError = false;
+  String loginErrorMessage = 'E-mail ou senha incorretos';
+  bool loginButtonPressed = false;
 
   @override
   Widget build(BuildContext context) {
@@ -29,8 +33,14 @@ class _LoginScreenState extends State<LoginScreen> {
       backgroundColor: Colors.deepPurple.shade100,
       body: SingleChildScrollView(
         child: SizedBox(
-          width: MediaQuery.of(context).size.width,
-          height: MediaQuery.of(context).size.height,
+          width: MediaQuery
+              .of(context)
+              .size
+              .width,
+          height: MediaQuery
+              .of(context)
+              .size
+              .height,
           child: Stack(
             fit: StackFit.expand,
             children: [
@@ -54,8 +64,17 @@ class _LoginScreenState extends State<LoginScreen> {
                                 color: Colors.grey.shade700,
                                 fontFamily: 'Comfortaa')),
                         Padding(
+                          padding: const EdgeInsets.only(top: 8.0),
+                          child: Text(
+                              'Práticas Integrativas e Complementares em Saúde',
+                              style: TextStyle(
+                                  fontSize: 14.0,
+                                  color: Colors.grey.shade900,
+                                  fontFamily: 'Comfortaa')),
+                        ),
+                        Padding(
                           padding: const EdgeInsets.only(
-                            top: 32.0,
+                            top: 18.0,
                           ),
                           child: TextFormField(
                             decoration: InputDecoration(
@@ -94,54 +113,10 @@ class _LoginScreenState extends State<LoginScreen> {
                                   color: Colors.indigo.shade900,
                                   fontFamily: 'Comfortaa'),
                             )),
-                        Visibility(
-                        visible: loginError,
-                        child: Text('E-mail ou senha incorretos.', style: TextStyle(color: Colors.redAccent, fontFamily: 'Comfortaa'),)),
+                        loginErrorVisibility(),
                         Padding(
                           padding: const EdgeInsets.only(top: 8.0),
-                          child: TextButton(
-                            onPressed: () async {
-
-                              UserCredential? userCredential = await _firebaseAuthService.firebaseAuthsignIn(
-                                  _emailController.text, _passwordController.text);
-
-                              if (userCredential != null) {
-                                setState(() {
-                                  loginError = false;
-                                });
-
-                                Pesquisador pesquisadorLogado = await Pesquisador.getPesquisadorfromCredential(userCredential);
-                                Pesquisador.loggedInPesquisador = pesquisadorLogado;
-
-                                Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (context) => DashboardCoordenador(pesquisadorLogado)));
-                              } else {
-
-                                setState(() {
-                                  loginError = true;
-                                });
-                              }
-                            },
-                            child: Text(
-                              'Entrar',
-                              style: TextStyle(
-                                  fontFamily: 'Comfortaa', fontSize: 16.0),
-                            ),
-                            style: ButtonStyle(
-                              shape:
-                                  MaterialStateProperty.all<RoundedRectangleBorder>(
-                                      RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(10.0))),
-                              foregroundColor:
-                                  MaterialStateProperty.all<Color>(Colors.white),
-                              backgroundColor: MaterialStateProperty.all<Color>(
-                                  Colors.deepPurple),
-                              padding: MaterialStateProperty.all<EdgeInsets>(
-                                  EdgeInsets.symmetric(
-                                      vertical: 14.0, horizontal: 28.0)),
-                            ),
-                          ),
+                          child: loginButton(),
                         )
                       ],
                     ),
@@ -167,4 +142,137 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
     );
   }
+
+  Widget loginButton() {
+    if (loginButtonPressed == true) {
+      return SizedBox(
+        width: 150,
+        height: 50,
+        child: TextButton(
+          onPressed: () {},
+          style: ButtonStyle(
+            shape: MaterialStateProperty.all<
+                RoundedRectangleBorder>(
+                RoundedRectangleBorder(
+                    borderRadius:
+                    BorderRadius.circular(10.0))),
+            foregroundColor: MaterialStateProperty.all<Color>(
+                Colors.white),
+            backgroundColor: MaterialStateProperty.all<Color>(
+                Colors.grey.shade700),
+            padding: MaterialStateProperty.all<EdgeInsets>(
+                EdgeInsets.symmetric(
+                    vertical: 14.0, horizontal: 16.0)),
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SizedBox(
+                  width: 15, height: 15, child: CircularProgressIndicator()),
+              Padding(
+                padding: const EdgeInsets.only(left: 8.0),
+                child: Text(
+                  'Aguarde...',
+                  style: TextStyle(
+                      fontFamily: 'Comfortaa', fontSize: 16.0),
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    } else {
+      return SizedBox(
+        width: 150,
+        height: 50,
+        child: TextButton(
+          onPressed: tryLogin,
+          child: Text(
+            'Entrar',
+            style: TextStyle(
+                fontFamily: 'Comfortaa', fontSize: 16.0),
+          ),
+          style: ButtonStyle(
+            shape: MaterialStateProperty.all<
+                RoundedRectangleBorder>(
+                RoundedRectangleBorder(
+                    borderRadius:
+                    BorderRadius.circular(10.0))),
+            foregroundColor: MaterialStateProperty.all<Color>(
+                Colors.white),
+            backgroundColor: MaterialStateProperty.all<Color>(
+                Colors.deepPurple),
+            padding: MaterialStateProperty.all<EdgeInsets>(
+                EdgeInsets.symmetric(
+                    vertical: 14.0, horizontal: 0.0)),
+          ),
+        ),
+      );
+    }
+  }
+
+  void tryLogin() async {
+    setState(() {
+      loginButtonPressed = true;
+    });
+
+    try {
+      Pesquisador? pesquisadorLogado =
+      await _firebaseAuthService.firebaseAuthsignIn(
+          _emailController.text,
+          _passwordController.text).timeout(
+          Duration(seconds: 5), onTimeout: () {
+        throw TimeoutException(
+            'Não há conexão com a Internet')
+      });
+
+      if (pesquisadorLogado == null) {
+        setState(() {
+          loginError = true;
+          loginErrorMessage =
+          'E-mail ou senha incorretos.';
+          loginButtonPressed = false;
+        });
+
+        // Usando do
+        //   PROVIDER para gerenciar os estados de autenticação. O código abaixo não é mais utilizado e está aqui somente como referência.
+        // setState(()
+        // {
+        //   loginError = false;
+        // });
+
+        // Pesquisador.loggedInPesquisador = pesquisadorLogado;
+
+        // Navigator.of(context).push(MaterialPageRoute(
+        //     builder: (context) => DashboardCoordenador(pesquisadorLogado)));
+
+      }
+    } on TimeoutException catch (e) {
+      setState(() {
+        loginError = true;
+        loginErrorMessage =
+        'Conexão com a Internet falhou. Tente mais tarde.';
+        loginButtonPressed = false;
+      });
+    } catch (e) {
+      setState(() {
+        loginError = true;
+        loginErrorMessage =
+        'Ocorreu um erro desconhecido.';
+        loginButtonPressed = false;
+      });
+    }
+  }
+
+  Widget loginErrorVisibility() {
+    return Visibility(
+        visible: loginError,
+        child: Text(
+          loginErrorMessage,
+          style: TextStyle(
+              color: Colors.redAccent,
+              fontFamily: 'Comfortaa'),
+        ));
+  }
+
 }

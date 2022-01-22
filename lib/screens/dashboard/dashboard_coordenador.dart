@@ -156,9 +156,10 @@ class _DashboardCoordenadorState extends State<DashboardCoordenador> {
                     child: InkWell(
                       onTap: () async {
 
+                        Pesquisador.loggedInPesquisador = null;
+
                         await _firebaseAuthService.firebaseSignOut();
 
-                        Navigator.pop(context);
                       },
                       child: SizedBox(
                         child: Column(

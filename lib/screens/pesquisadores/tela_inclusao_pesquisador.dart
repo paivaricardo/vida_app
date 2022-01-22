@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:vida_app/components/title_text.dart';
+import 'package:vida_app/services/firebase_auth_service.dart';
 
 class TelaInclusaoPesquisador extends StatelessWidget {
   final String userEmail;
   final String userPassword;
 
-  const TelaInclusaoPesquisador(this.userEmail, this.userPassword, {Key? key}) : super(key: key);
+  final FirebaseAuthService _firebaseAuthService = FirebaseAuthService();
+
+  TelaInclusaoPesquisador(this.userEmail, this.userPassword, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +41,15 @@ class TelaInclusaoPesquisador extends StatelessWidget {
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 16.0),
-                child: ElevatedButton.icon(onPressed: () => Navigator.pop(context), icon: Icon(Icons.close),label: Text('Fechar tela')),
+                child: Text('Após o fechamento desta tela, o usuário atual será desautenticado. Será necessário autenticar novamente.'),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 16.0),
+                child: ElevatedButton.icon(onPressed: () async{
+                  await _firebaseAuthService.firebaseSignOut();
+                  Navigator.pop(context);
+                  Navigator.pop(context);
+                }, icon: Icon(Icons.close),label: Text('Fechar tela')),
               ),
             ],
           ),
