@@ -11,7 +11,6 @@ class AuthWrapperWidget extends StatelessWidget {
   Widget build(BuildContext context) {
 
     final Pesquisador? pesquisador = Provider.of<Pesquisador?>(context);
-    // print(pesquisador);
 
     // Return either Dashboard or Login Widgets
     if (pesquisador == null) {

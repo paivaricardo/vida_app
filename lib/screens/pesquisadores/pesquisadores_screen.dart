@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:vida_app/components/progress.dart';
-import 'package:vida_app/models/instituicao_model.dart';
 import 'package:vida_app/models/pesquisador_model.dart';
 import 'package:vida_app/screens/pesquisadores/consultar_pesquisador_screen.dart';
 import 'package:vida_app/screens/pesquisadores/cadastrar_pesquisador_screen.dart';
@@ -58,12 +57,14 @@ class _PesquisadoresScreenState extends State<PesquisadoresScreen> {
                       .map((element) => Pesquisador.fromJson(
                           element.data() as Map<String, dynamic>))
                       .toList();
+
                   // pesquisadores.forEach((pesquisador) => pesquisador.retrieveInstituicao());
 
-                  Future.forEach(
-                      pesquisadores,
-                      (Pesquisador pesquisador) =>
-                          pesquisador.retrieveInstituicao());
+                  // Não mais usado - objeto instituição está dentro do documento do pesquisador
+                  // Future.forEach(
+                  //     pesquisadores,
+                  //     (Pesquisador pesquisador) =>
+                  //         pesquisador.retrieveInstituicao());
 
                   return ListView.builder(
                       itemCount: pesquisadores.length,

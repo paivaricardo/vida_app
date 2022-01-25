@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:vida_app/models/paciente_model.dart';
 import 'package:vida_app/screens/questionario_ansiedade/questionario_ansiedade_screen.dart';
+import 'package:vida_app/screens/questionario_depressao_phq9/questionario_depressao_phq9_screen.dart';
 
 class ListaQuestionarios extends StatelessWidget {
   final Paciente paciente;
@@ -20,10 +21,10 @@ class ListaQuestionarios extends StatelessWidget {
               padding: const EdgeInsets.fromLTRB(8.0, 24.0, 8.0, 24.0),
               child: Text(
                 paciente.sexo == 'F'
-                ? 'Selecione o questionário a ser aplicado na paciente ${paciente.nome}.'
-                : paciente.sexo == 'M'
-                ? 'Selecione o questionário a ser aplicado no paciente ${paciente.nome}.'
-                : 'Selecione o questionário a ser aplicado em paciente ${paciente.nome}.',
+                    ? 'Selecione o questionário a ser aplicado na paciente ${paciente.nome}.'
+                    : paciente.sexo == 'M'
+                        ? 'Selecione o questionário a ser aplicado no paciente ${paciente.nome}.'
+                        : 'Selecione o questionário a ser aplicado em paciente ${paciente.nome}.',
                 style: TextStyle(
                   fontSize: 16.0,
                 ),
@@ -36,7 +37,8 @@ class ListaQuestionarios extends StatelessWidget {
               ),
               title: Text('Ansiedade'),
               subtitle: Text('BAI (INVENTÁRIO DE ANSIEDADE DE BECK)'),
-              onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (context) => QuestionarioAnsiedadeScreen(paciente))),
+              onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => QuestionarioAnsiedadeScreen(paciente))),
             )),
             Card(
                 child: ListTile(
@@ -46,9 +48,12 @@ class ListaQuestionarios extends StatelessWidget {
               title: Text('Depressão'),
               subtitle: Text('Patient Health Questionnaire-9 (PHQ-9)'),
               onTap: () {
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                    content:
-                        Text('Funcionalidade a ser implentada futuramente.')));
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => QuestionarioDepressaoPHQ9Screen(
+                              paciente: paciente,
+                            )));
               },
             )),
             Card(
@@ -92,17 +97,17 @@ class ListaQuestionarios extends StatelessWidget {
             )),
             Card(
                 child: ListTile(
-                  leading: Icon(
-                    Icons.list_alt_rounded,
-                  ),
-                  title: Text('Tabagismo'),
-                  subtitle: Text('TESTE DE FARGESTRÖM'),
-                  onTap: () {
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                        content:
+              leading: Icon(
+                Icons.list_alt_rounded,
+              ),
+              title: Text('Tabagismo'),
+              subtitle: Text('TESTE DE FARGESTRÖM'),
+              onTap: () {
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    content:
                         Text('Funcionalidade a ser implentada futuramente.')));
-                  },
-                )),
+              },
+            )),
           ],
         )));
   }

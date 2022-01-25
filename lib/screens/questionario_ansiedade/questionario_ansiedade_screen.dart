@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
+import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
-import 'package:vida_app/components/menu_escolha_pontuacao_ansiedade_questao_widget.dart';
-import 'package:vida_app/local_database/dao/questionario_ansiedade_dao.dart';
+import 'package:vida_app/components/menu_escolha_pontuacao_ansiedade_widget.dart';
+import 'package:vida_app/helpers/datetime_helper.dart';
 import 'package:vida_app/models/paciente_model.dart';
+import 'package:vida_app/models/pesquisador_model.dart';
 import 'package:vida_app/models/questionario_ansiedade_model.dart';
-import 'package:vida_app/models/questionario_model.dart';
 import 'package:vida_app/screens/questionario_ansiedade/resultado_questionario_ansiedade_screen.dart';
 
 class QuestionarioAnsiedadeScreen extends StatefulWidget {
@@ -21,42 +21,27 @@ class QuestionarioAnsiedadeScreen extends StatefulWidget {
 class _QuestionarioAnsiedadeScreenState
     extends State<QuestionarioAnsiedadeScreen> {
   // Uuid do questionário
-  var generatedUuid = Uuid().v4();
+  String generatedUuid = Uuid().v4();
 
   // Form key
-  final _formKey = GlobalKey<FormState>();
-
-  // DAO - questionário de ansiedade
-  final QuestionarioAnsiedadeDAO _questionarioAnsiedadeDAO = QuestionarioAnsiedadeDAO();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   // Member variables
   String? radioValuePossuiDiagnosticoAnsiedade = 'N';
   bool jaEncontraTratamento = false;
 
-  // RegExp para validação de data
-  RegExp regExpDataDesdeQuando = RegExp(
-      r'^(?:(?:31(\/|-|\.)(?:0?[13578]|1[02]))\1|(?:(?:29|30)(\/|-|\.)(?:0?[13-9]|1[0-2])\2))(?:(?:1[6-9]|[2-9]\d)?\d{2})$|^(?:29(\/|-|\.)0?2\3(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))$|^(?:0?[1-9]|1\d|2[0-8])(\/|-|\.)(?:(?:0?[1-9])|(?:1[0-2]))\4(?:(?:1[6-9]|[2-9]\d)?\d{2})$');
-
   // Controllers
   TextEditingController desdeQuandoPossuiDiagController =
-  TextEditingController();
+      TextEditingController();
   TextEditingController tempoTratamentoController = TextEditingController();
   TextEditingController tratamentoAtualAnsiedadeController =
-  TextEditingController();
+      TextEditingController();
   TextEditingController tratamentosPreviosAnsiedadeController =
-  TextEditingController();
-
-  // Mask input formatters
-  MaskTextInputFormatter dateMaskFormatter =
-  MaskTextInputFormatter(mask: '@#/&#/####', filter: {
-    '@': RegExp(r'[0-3]'),
-    '&': RegExp(r'[01]'),
-    '#': RegExp(r'[0-9]'),
-  });
+      TextEditingController();
 
   // Questionário de ansiedade - objeto onde os dados serão salvos
   late QuestionarioAnsiedade questionarioAnsiedadeAplicado =
-  QuestionarioAnsiedade(paciente: widget.paciente);
+      QuestionarioAnsiedade.buildFromPaciente(paciente: widget.paciente);
 
   @override
   Widget build(BuildContext context) {
@@ -118,7 +103,7 @@ class _QuestionarioAnsiedadeScreenState
                               leading: Radio(
                                 value: 'N',
                                 groupValue:
-                                radioValuePossuiDiagnosticoAnsiedade,
+                                    radioValuePossuiDiagnosticoAnsiedade,
                                 onChanged: (String? value) {
                                   setState(() {
                                     radioValuePossuiDiagnosticoAnsiedade =
@@ -136,7 +121,7 @@ class _QuestionarioAnsiedadeScreenState
                               leading: Radio(
                                 value: 'NS',
                                 groupValue:
-                                radioValuePossuiDiagnosticoAnsiedade,
+                                    radioValuePossuiDiagnosticoAnsiedade,
                                 onChanged: (String? value) {
                                   setState(() {
                                     radioValuePossuiDiagnosticoAnsiedade =
@@ -154,7 +139,7 @@ class _QuestionarioAnsiedadeScreenState
                               leading: Radio(
                                 value: 'S',
                                 groupValue:
-                                radioValuePossuiDiagnosticoAnsiedade,
+                                    radioValuePossuiDiagnosticoAnsiedade,
                                 onChanged: (String? value) {
                                   setState(() {
                                     radioValuePossuiDiagnosticoAnsiedade =
@@ -176,21 +161,22 @@ class _QuestionarioAnsiedadeScreenState
                               decoration: InputDecoration(
                                   labelText: 'Data do diagnóstico',
                                   hintText:
-                                  'ex.: 31/12/2016 - digite apenas números'),
+                                      'ex.: 31/12/2016 - digite apenas números'),
                               controller: desdeQuandoPossuiDiagController,
                               keyboardType: TextInputType.number,
-                              inputFormatters: [dateMaskFormatter],
+                              maxLength: 10,
+                              inputFormatters: [DateTimeHelper.dateMaskFormatter],
                               validator: (dataDesdeQuando) {
                                 if (dataDesdeQuando == null ||
-                                    regExpDataDesdeQuando
+                                    DateTimeHelper.regExpData
                                         .hasMatch(dataDesdeQuando)) {
                                   if (dataDesdeQuando != null) {
-                                    if (dateParse(dataDesdeQuando).isAfter(
-                                        questionarioAnsiedadeAplicado
-                                            .paciente.dataNascimento) &&
-                                        dateParse(dataDesdeQuando)
-                                            .isBefore(DateTime.now()) ||
-                                        dateParse(dataDesdeQuando)
+                                    if (DateTimeHelper.dateParse(dataDesdeQuando).isAfter(
+                                                questionarioAnsiedadeAplicado
+                                                    .paciente.dataNascimento) &&
+                                            DateTimeHelper.dateParse(dataDesdeQuando)
+                                                .isBefore(DateTime.now()) ||
+                                        DateTimeHelper.dateParse(dataDesdeQuando)
                                             .isAtSameMomentAs(DateTime.now())) {
                                       return null;
                                     } else {
@@ -223,7 +209,7 @@ class _QuestionarioAnsiedadeScreenState
                         visible: jaEncontraTratamento,
                         child: TextFormField(
                           decoration:
-                          InputDecoration(labelText: 'Tempo de tratamento'),
+                              InputDecoration(labelText: 'Tempo de tratamento'),
                           controller: tempoTratamentoController,
                         ),
                       ),
@@ -246,7 +232,7 @@ class _QuestionarioAnsiedadeScreenState
                 ),
                 Padding(
                   padding:
-                  const EdgeInsets.symmetric(vertical: 0, horizontal: 8),
+                      const EdgeInsets.symmetric(vertical: 0, horizontal: 8),
                   child: ListView.builder(
                       shrinkWrap: true,
                       physics: NeverScrollableScrollPhysics(),
@@ -257,10 +243,7 @@ class _QuestionarioAnsiedadeScreenState
                           children: <Widget>[
                             Expanded(
                                 child: Text(
-                                    '${questionarioAnsiedadeAplicado
-                                        .questoes[index + 1]!
-                                        .ordemQuestaoDomain}. ${questionarioAnsiedadeAplicado
-                                        .questoes[index + 1]!.descricao}')),
+                                    '${questionarioAnsiedadeAplicado.questoes[index + 1]!.ordemQuestaoDomain}. ${questionarioAnsiedadeAplicado.questoes[index + 1]!.descricao}')),
                             MenuEscolhaPontuacaoQuestaoWidget(
                               questao: questionarioAnsiedadeAplicado
                                   .questoes[index + 1]!,
@@ -292,61 +275,64 @@ class _QuestionarioAnsiedadeScreenState
                             questionarioAnsiedadeAplicado
                                 .uuidQuestionarioAplicado = generatedUuid;
 
-                            questionarioAnsiedadeAplicado
-                                .dataRealizacao = DateTime.now();
+                            questionarioAnsiedadeAplicado.dataRealizacao =
+                                DateTime.now();
 
                             questionarioAnsiedadeAplicado
-                                .pontuacaoQuestionario =
+                                    .pontuacaoQuestionario =
                                 questionarioAnsiedadeAplicado.questoes.entries
                                     .fold(
-                                    0,
+                                        0,
                                         (previousValue,
-                                        element) =>
-                                    previousValue +
-                                        element.value.pontuacao);
+                                                element) =>
+                                            previousValue +
+                                            element.value.pontuacao);
 
                             // Registrar a interpretação do escore no questionário de ansiedade - Inventário de Ansiedade de BAI
                             questionarioAnsiedadeAplicado
                                 .registrarInterpretacaoScoreBAI(
-                                questionarioAnsiedadeAplicado
-                                    .pontuacaoQuestionario);
+                                    questionarioAnsiedadeAplicado
+                                        .pontuacaoQuestionario);
 
                             // Registros no questionário específico de ansiedade
                             questionarioAnsiedadeAplicado
-                                .possuiDiagnosticoAnsiedade =
-                            radioValuePossuiDiagnosticoAnsiedade!;
+                                    .possuiDiagnosticoAnsiedade =
+                                radioValuePossuiDiagnosticoAnsiedade!;
 
                             questionarioAnsiedadeAplicado
-                                .desdeQuandoPossuiDiag =
-                            desdeQuandoPossuiDiagController.text.isNotEmpty
-                                ? dateParse(
-                                desdeQuandoPossuiDiagController.text)
-                                : null;
+                                    .desdeQuandoPossuiDiag =
+                                desdeQuandoPossuiDiagController.text.isNotEmpty
+                                    ? DateTimeHelper.dateParse(
+                                        desdeQuandoPossuiDiagController.text)
+                                    : null;
 
                             questionarioAnsiedadeAplicado.jaEncontraTratamento =
                                 jaEncontraTratamento;
 
                             questionarioAnsiedadeAplicado.tempoTratamento =
-                            tempoTratamentoController.text.isNotEmpty
-                                ? tempoTratamentoController.text
-                                : 'Sem tempo definido';
+                                tempoTratamentoController.text.isNotEmpty
+                                    ? tempoTratamentoController.text
+                                    : 'Sem tempo definido';
 
                             questionarioAnsiedadeAplicado
-                                .tratamentoAtualAnsiedade =
-                            tratamentoAtualAnsiedadeController
-                                .text.isNotEmpty
-                                ? tratamentoAtualAnsiedadeController.text
-                                : 'Nenhum';
+                                    .tratamentoAtualAnsiedade =
+                                tratamentoAtualAnsiedadeController
+                                        .text.isNotEmpty
+                                    ? tratamentoAtualAnsiedadeController.text
+                                    : 'Nenhum';
 
                             questionarioAnsiedadeAplicado
-                                .tratamentosPreviosAnsiedade =
-                            tratamentosPreviosAnsiedadeController
-                                .text.isNotEmpty
-                                ? tratamentoAtualAnsiedadeController.text
-                                : 'Nenhum';
+                                    .tratamentosPreviosAnsiedade =
+                                tratamentosPreviosAnsiedadeController
+                                        .text.isNotEmpty
+                                    ? tratamentoAtualAnsiedadeController.text
+                                    : 'Nenhum';
 
-                            // Salvar o questionário e todos os seus registros no banco de dados, por meio do DAO
-                            await _questionarioAnsiedadeDAO.save(questionarioAnsiedadeAplicado);
+                            // Registrar o pesquisador responsável
+                            questionarioAnsiedadeAplicado.pesquisadorResponsavel = Provider.of<Pesquisador?>(context, listen: false);
+
+                            // Salvar o questionário e todos os seus registros no banco de dados Firestore Database
+                            questionarioAnsiedadeAplicado.firestoreAdd();
 
                             print(questionarioAnsiedadeAplicado.toString());
 
@@ -355,7 +341,7 @@ class _QuestionarioAnsiedadeScreenState
                                 builder: (context) =>
                                     ResultadoQuestionarioAnsiedadeScreen(
                                       questionario:
-                                      questionarioAnsiedadeAplicado,
+                                          questionarioAnsiedadeAplicado,
                                     )));
                           } else {
                             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -363,8 +349,8 @@ class _QuestionarioAnsiedadeScreenState
                                     'Alguns dados estão inválidos. Verifique os dados e tente submeter novamente.')));
                           }
                         } catch (error, stacktrace) {
-                          // print(error);
-                          // print(stacktrace.toString());
+                          print(error);
+                          print(stacktrace.toString());
                           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                               content: Text(
                                   'Houve um erro ao tentar salvar o questionário.')));
@@ -383,8 +369,4 @@ class _QuestionarioAnsiedadeScreenState
     );
   }
 
-  DateTime dateParse(String date) {
-    return DateTime(int.parse(date.substring(6, 10)),
-        int.parse(date.substring(3, 5)), int.parse(date.substring(0, 2)));
-  }
 }

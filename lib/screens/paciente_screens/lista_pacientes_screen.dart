@@ -1,7 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:vida_app/components/alphabet_scroll_page_pacientes.dart';
 import 'package:vida_app/components/progress.dart';
-import 'package:vida_app/local_database/dao/paciente_dao.dart';
 import 'package:vida_app/models/paciente_model.dart';
 import 'package:vida_app/screens/paciente_screens/cadastro_paciente_screen.dart';
 
@@ -13,7 +13,7 @@ class ListaPacientesScreen extends StatefulWidget {
 }
 
 class _ListaPacientesScreenState extends State<ListaPacientesScreen> {
-  PacienteDAO _pacienteDAO = PacienteDAO();
+  final Stream<QuerySnapshot> _pacientesStream = FirebaseFirestore.instance.collection(Paciente.firestoreCollectionName).orderBy('nome').snapshots();
 
   @override
   Widget build(BuildContext context) {
@@ -21,46 +21,58 @@ class _ListaPacientesScreenState extends State<ListaPacientesScreen> {
       appBar: AppBar(
         title: Text('Lista de pacientes'),
       ),
-      body: FutureBuilder<List<Paciente>>(
-        initialData: [],
-        future: _pacienteDAO.findAllOrdered(),
-        builder: (context, snapshot) {
+      body: StreamBuilder<QuerySnapshot>(
+        stream: _pacientesStream,
+        builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+          if (snapshot.hasError) {
+            return Text('Ocorreu um problema desconhecido.');
+          }
+
           switch (snapshot.connectionState) {
             case ConnectionState.none:
-              return Center(
-                child: Text('Ocorreu um erro desconhecido na aplicação.'),
+              return const Center(
+                child: Text('Sem conexão :/'),
               );
-            case ConnectionState.waiting:
-              return Progress(
-                message: 'Carregando dados de pacientes',
-              );
-            case ConnectionState.done:
-              if (snapshot.data != null) {
-                final List<Paciente> pacientes =
-                    snapshot.data as List<Paciente>;
 
-                if (pacientes.isEmpty) {
+            case ConnectionState.waiting:
+              return const Progress(
+                message: 'Carregando dados de pacientes...',
+              );
+
+            case ConnectionState.active:
+              if (snapshot.data != null) {
+                List<DocumentSnapshot> pacientesDocSnapshots =
+                    snapshot.data!.docs;
+
+                if (pacientesDocSnapshots.isEmpty) {
                   return Center(
                     child: Text('Não há pacientes cadastrados ainda!'),
                   );
                 }
 
-                return AlphabetScrollPagePacientes(
-                  listPacientes: pacientes,
-                );
+                List<Paciente> pacientes = pacientesDocSnapshots
+                    .map((element) => Paciente.fromJson(
+                    element.data() as Map<String, dynamic>))
+                    .toList();
+                
+                return AlphabetScrollPagePacientes(listPacientes: pacientes);
               }
 
-              return Center(
-                child: Text('Não há pacientes cadastrados ainda!'),
+              return const Center(
+                child: Text('Ocorreu um problema desconhecido.'),
+              );
+
+            case ConnectionState.done:
+              return const Center(
+                child: Text('Ocorreu um problema. Conexão fechada.'),
               );
 
             default:
-              return Center(
-                child: Text('Ocorreu um erro desconhecido na aplicação.'),
+              return const Center(
+                child: Text('Ocorreu um problema desconhecido.'),
               );
           }
-        },
-      ),
+        }),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.of(context)

@@ -34,7 +34,7 @@ class FirebaseAuthService {
 
   // Sign in with e-mail and password
   Future<Pesquisador?> firebaseAuthsignIn(String email, String password) async {
-    try {
+
       UserCredential? userCredential = await _firebaseAuth
           .signInWithEmailAndPassword(email: email, password: password);
 
@@ -42,10 +42,7 @@ class FirebaseAuthService {
           .getPesquisadorfromFirebaseAuthUser(userCredential.user);
 
       return retrievedPesquisador;
-    } catch (e) {
-      print(e);
-      return null;
-    }
+
   }
 
 //  Sign out

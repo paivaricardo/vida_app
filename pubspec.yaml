@@ -34,6 +34,7 @@ dependencies:
   uuid:
   mask_text_input_formatter: ^2.0.0
   provider: ^6.0.2
+  rxdart: ^0.27.3
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.

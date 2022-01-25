@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:vida_app/helpers/datetime_helper.dart';
-import 'package:vida_app/helpers/questionario_redirect_helper.dart';
 import 'package:vida_app/models/paciente_model.dart';
+import 'package:vida_app/models/pesquisador_model.dart';
 import 'package:vida_app/models/questionario_domain_model.dart';
 
 class Questionario {
@@ -16,6 +16,7 @@ class Questionario {
        `uuid_paciente`               text NOT NULL ,
        `id_questionario_domain`      integer NOT NULL ,
        `uuid_pesquisador`            text NULL ,
+       `observacoes`                 text NULL ,
        `ic_active`                   integer DEFAULT 1 ,
       
       PRIMARY KEY (`uuid_questionario_aplicado`),
@@ -25,14 +26,32 @@ class Questionario {
       );
   ''';
 
+  static const String firestoreCollectionName = 'questionarios';
+
   String? uuidQuestionarioAplicado;
   DateTime? dataRealizacao;
   int idQuestionarioDomain;
   Paciente paciente;
   int pontuacaoQuestionario = 0;
-  String? uuidPesquisador;
+  String interpretacaoPontuacaoQuestionario = '';
+  Pesquisador? pesquisadorResponsavel;
+  String observacoes = 'SEM OBSERVAÇÕES';
+  int icActive = 1;
 
-  Questionario({required this.idQuestionarioDomain, required this.paciente});
+  Questionario({
+    this.uuidQuestionarioAplicado,
+    this.dataRealizacao,
+    required this.idQuestionarioDomain,
+    required this.paciente,
+    this.pontuacaoQuestionario = 0,
+    this.interpretacaoPontuacaoQuestionario = '',
+    this.pesquisadorResponsavel,
+    this.observacoes = 'SEM OBSERVAÇÕES',
+    this.icActive = 1,
+  });
+
+  Questionario.buildMinimal(
+      {required this.idQuestionarioDomain, required this.paciente});
 
   Questionario.buildFromQuestionario(Questionario questionario)
       : uuidQuestionarioAplicado = questionario.uuidQuestionarioAplicado,
@@ -40,67 +59,8 @@ class Questionario {
         idQuestionarioDomain = questionario.idQuestionarioDomain,
         paciente = questionario.paciente,
         pontuacaoQuestionario = questionario.pontuacaoQuestionario,
-        uuidPesquisador = questionario.uuidPesquisador;
-
-  Widget buildSnippet(BuildContext context) {
-    return Card(
-      child: Material(
-        child: InkWell(
-          onTap: () async =>
-              await QuestionarioRedirectHelper.redirectQuestionario(
-                  this, context),
-          child: SizedBox(
-            height: 130,
-            child: Row(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Icon(Icons.list_alt_rounded),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Questionário',
-                        style: TextStyle(
-                          fontSize: 20.0,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      Text(
-                        QuestionarioDomain.retriveNomeQuestionario(
-                            idQuestionarioDomain)[0],
-                        style: TextStyle(
-                          fontSize: 16.0,
-                          fontStyle: FontStyle.italic,
-                        ),
-                      ),
-                      Text(
-                        QuestionarioDomain.retriveNomeQuestionario(
-                            idQuestionarioDomain)[1],
-                        style: TextStyle(color: Colors.grey),
-                      ),
-                      Visibility(
-                          visible: QuestionarioDomain
-                              .visibleScores[idQuestionarioDomain]!,
-                          child: Text(
-                            'Score: ${pontuacaoQuestionario}',
-                            style: TextStyle(
-                                fontSize: 16.0, color: Colors.deepOrange),
-                          )),
-                      Text(
-                          'Data: ${DateTimeHelper.retriedFormattedDateStringBR(dataRealizacao)}'),
-                      Text('Id.: ${uuidQuestionarioAplicado}'),
-                    ],
-                  ),
-                )
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
+        interpretacaoPontuacaoQuestionario =
+            questionario.interpretacaoPontuacaoQuestionario,
+        pesquisadorResponsavel = questionario.pesquisadorResponsavel,
+        observacoes = questionario.observacoes;
 }

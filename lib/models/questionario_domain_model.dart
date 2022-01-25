@@ -3,7 +3,7 @@ class QuestionarioDomain {
 
   // Domain values
   static const ansiedadeBAIDomainValue = 1000;
-  static const depressaoPHP9DomainValue = 2000;
+  static const depressaoPHQ9DomainValue = 2000;
   static const depressaoBeckDomainValue = 3000;
   static const dorInventarioDomainValue = 4000;
   static const dorStartDomainValue = 5000;
@@ -22,7 +22,7 @@ class QuestionarioDomain {
 
   static Map<int, List<String>> questionarioDomainValues = {
     ansiedadeBAIDomainValue: ['Ansiedade', 'BAI (INVENTÁRIO DE ANSIEDADE DE BECK)'],
-    depressaoPHP9DomainValue: ['Depressão', 'Patient Health Questionnaire-9 (PHQ-9).'],
+    depressaoPHQ9DomainValue: ['Depressão', 'Patient Health Questionnaire-9 (PHQ-9).'],
     depressaoBeckDomainValue: ['Depressão', 'ESCALA DE DEPRESSÃO DE BECK.'],
     dorInventarioDomainValue: ['Dor', 'INVENTÁRIO BREVE DA DOR.'],
     dorStartDomainValue: ['Dor', 'STarT Back Screening Tool- Brasil (SBST-Brasil).'],
@@ -31,7 +31,7 @@ class QuestionarioDomain {
 
   static Map<int, bool> visibleScores = {
     ansiedadeBAIDomainValue: true,
-    depressaoPHP9DomainValue: true,
+    depressaoPHQ9DomainValue: true,
     depressaoBeckDomainValue: true,
     dorInventarioDomainValue: false,
     dorStartDomainValue: true,

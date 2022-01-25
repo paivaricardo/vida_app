@@ -32,7 +32,7 @@ class ConsultarPesquisadorScreen extends StatelessWidget {
                 padding: const EdgeInsets.only(top: 32.0),
                 child: TitleText('Instituição'),
               ),
-              Text(pesquisador.instituicaoInstance == null ? 'SEM CONEXÃO À INTERNET' : pesquisador.instituicaoInstance!.nomeInstituicao),
+              Text(pesquisador.instituicao.nomeInstituicao),
               const Padding(
                 padding: const EdgeInsets.only(top: 32.0),
                 child: TitleText('CPF'),

@@ -5,7 +5,7 @@ import 'package:vida_app/models/pesquisador_model.dart';
 import 'package:vida_app/screens/auth_wrapper/auth_wrapper_widget.dart';
 import 'package:vida_app/services/firebase_auth_service.dart';
 
-void main() async {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   // Initialize Firebase

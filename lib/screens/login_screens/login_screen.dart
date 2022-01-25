@@ -3,9 +3,7 @@ import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:vida_app/components/gradient_text.dart';
-import 'package:vida_app/firebase_client/flutterfire.dart';
 import 'package:vida_app/models/pesquisador_model.dart';
-import 'package:vida_app/screens/dashboard/dashboard_coordenador.dart';
 import 'package:vida_app/services/firebase_auth_service.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -247,6 +245,20 @@ class _LoginScreenState extends State<LoginScreen> {
         //     builder: (context) => DashboardCoordenador(pesquisadorLogado)));
 
       }
+    } on FirebaseAuthException catch (e) {
+      print(e);
+
+      if (e.code == 'network-request-failed') {
+        loginErrorMessage = 'Conexão com a Internet falhou. Tente mais tarde.';
+      } else {
+        loginErrorMessage =
+        'E-mail ou senha incorretos.';
+      }
+
+      setState(() {
+        loginError = true;
+        loginButtonPressed = false;
+      });
     } on TimeoutException catch (e) {
       setState(() {
         loginError = true;

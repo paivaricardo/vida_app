@@ -17,15 +17,17 @@ class Questao {
       );
   ''';
 
-  Questionario questionario;
-  int idQuestaoQuestionarioDomain;
-  int pontuacao;
+  int idQuestionarioDomain;
   int ordemQuestaoDomain;
   String descricao;
+  int pontuacao;
 
-  Questao(this.questionario, this.ordemQuestaoDomain)
+  Questao(this.idQuestionarioDomain, this.ordemQuestaoDomain, {this.pontuacao = 0})
       : descricao = QuestaoQuestionarioDomain.findQuestaoDescription(
-            questionario.idQuestionarioDomain, ordemQuestaoDomain),
-        pontuacao = 0,
-        idQuestaoQuestionarioDomain = questionario.idQuestionarioDomain + ordemQuestaoDomain;
+            idQuestionarioDomain, ordemQuestaoDomain);
+
+  @override
+  String toString() {
+    return 'Questao: {idQuestionarioDomain: $idQuestionarioDomain, ordemQuestaoDomain: $ordemQuestaoDomain, descricao: $descricao, pontuacao: $pontuacao}';
+  }
 }

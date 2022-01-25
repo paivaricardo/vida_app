@@ -1,13 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:vida_app/models/questao_model.dart';
 
-// Menu options:
-// <String>[
-// 'Absolutamente não (0)',
-// 'Levemente (1)',
-// 'Moderadamente (2)',
-// 'Gravemente (3)',],
-
 class MenuEscolhaPontuacaoQuestaoWidget extends StatefulWidget {
   final String opcaoInicial;
   final List<String> opcoesMenu;

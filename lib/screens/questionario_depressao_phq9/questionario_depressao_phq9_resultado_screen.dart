@@ -1,18 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:vida_app/helpers/datetime_helper.dart';
-import 'package:vida_app/models/questionario_ansiedade_model.dart';
+import 'package:vida_app/models/questionario_depressao_phq9_model.dart';
 
-class ResultadoQuestionarioAnsiedadeScreen extends StatelessWidget {
-  final QuestionarioAnsiedade questionario;
+class ResultadoQuestionarioDepressaoPHQ9Screen extends StatelessWidget {
+  final QuestionarioDepressaoPHQ9 questionario;
 
-  ResultadoQuestionarioAnsiedadeScreen({required this.questionario, Key? key})
+  ResultadoQuestionarioDepressaoPHQ9Screen({required this.questionario, Key? key})
       : super(key: key);
+
 
   @override
   Widget build(BuildContext context) {
+    questionario.questoes.forEach((key, value) => print(value));
+
     return Scaffold(
       appBar: AppBar(
-        title: Text('Resultado do questionário de ansiedade'),
+        title: Text('Resultado do questionário de depressão PHQ-9'),
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -20,7 +23,7 @@ class ResultadoQuestionarioAnsiedadeScreen extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Text(
-                'BAI (INVENTÁRIO DE ANSIEDADE DE BECK)',
+                'PATIENT HEALTH QUESTIONNAIRE-9 (PHQ-9)',
                 style: TextStyle(
                   fontSize: 18.0,
                   fontWeight: FontWeight.bold,
@@ -70,16 +73,6 @@ class ResultadoQuestionarioAnsiedadeScreen extends StatelessWidget {
                 ),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text(
-                questionario.interpretacaoPontuacaoQuestionario,
-                style: TextStyle(
-                  fontSize: 18.0,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
             Divider(),
             ListView.builder(
                 shrinkWrap: true,
@@ -99,42 +92,6 @@ class ResultadoQuestionarioAnsiedadeScreen extends StatelessWidget {
                     ),
                   );
                 }),
-            Padding(
-              padding: const EdgeInsets.only(top: 32.0),
-              child: Text(
-                'Interpretação do Escore Total do BAI',
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-            ),
-            DataTable(columns: [
-              DataColumn(label: Text('Escore Total')),
-              DataColumn(label: Text('Gravidade da ansiedade'))
-            ], rows: [
-              DataRow(
-                cells: [
-                  DataCell(Text('0 - 7')),
-                  DataCell(Text('Grau mínimo de ansiedade')),
-                ],
-              ),
-              DataRow(
-                cells: [
-                  DataCell(Text('8 - 15')),
-                  DataCell(Text('Ansiedade leve')),
-                ],
-              ),
-              DataRow(
-                cells: [
-                  DataCell(Text('16 - 25')),
-                  DataCell(Text('Ansiedade moderada')),
-                ],
-              ),
-              DataRow(
-                cells: [
-                  DataCell(Text('26 - 63')),
-                  DataCell(Text('Ansiedade grave')),
-                ],
-              ),
-            ]),
             Padding(
               padding: const EdgeInsets.only(top: 32.0),
               child: Row(

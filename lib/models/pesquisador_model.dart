@@ -30,92 +30,103 @@ class Pesquisador {
 
   final String uuidPesquisador;
   String nomePesquisador;
-  String uuidInstituicao;
+  Instituicao instituicao;
   String cpfPesquisador;
   String cargoPesquisador;
   String emailPesquisador;
   int idPerfilUtilizador;
-  int icActive;
-  int icAuthorized;
-  int firstAccess;
+  bool icActive;
+  bool icAuthorized;
+  bool firstAccess;
 
   // Optional relational parameters
-  Instituicao? instituicaoInstance;
 
   Pesquisador(
       {required this.uuidPesquisador,
       required this.nomePesquisador,
-      required this.uuidInstituicao,
+      required this.instituicao,
       required this.cpfPesquisador,
       required this.cargoPesquisador,
       required this.emailPesquisador,
       required this.idPerfilUtilizador,
-      this.icActive = 1,
-      this.icAuthorized = 1,
-      this.firstAccess = 1});
+      this.icActive = true,
+      this.icAuthorized = true,
+      this.firstAccess = true,
+      });
 
-  Pesquisador.fromJson(Map<String, dynamic> json) :
-      this(
-        uuidPesquisador : json['uuidPesquisador'],
-        nomePesquisador : json['nomePesquisador'],
-        uuidInstituicao : json['uuidInstituicao'],
-        cpfPesquisador : json['cpfPesquisador'],
-        cargoPesquisador : json['cargoPesquisador'],
-        emailPesquisador : json['emailPesquisador'],
-        idPerfilUtilizador : int.parse(json['idPerfilUtilizador'].toString()),
-        icActive : int.parse(json['icActive'].toString()),
-        icAuthorized : int.parse(json['icAuthorized'].toString()),
-        firstAccess : int.parse(json['firstAccess'].toString()),
-      )
-  ;
+  Pesquisador.fromJson(Map<String, dynamic> json)
+      : this(
+          uuidPesquisador: json['uuidPesquisador'],
+          nomePesquisador: json['nomePesquisador'],
+          instituicao: Instituicao.fromJson(json['instituicao']),
+          cpfPesquisador: json['cpfPesquisador'],
+          cargoPesquisador: json['cargoPesquisador'],
+          emailPesquisador: json['emailPesquisador'],
+          idPerfilUtilizador: int.parse(json['idPerfilUtilizador'].toString()),
+          icActive: json['icActive'] == 'true',
+          icAuthorized: json['icAuthorized'] == 'true',
+          firstAccess: json['firstAccess'] == 'true',
+        );
 
-  static Future<Pesquisador?> getPesquisadorfromFirebaseAuthUser(User? user) async {
-
+  static Future<Pesquisador?> getPesquisadorfromFirebaseAuthUser(
+      User? user) async {
     if (user == null) {
       return null;
     }
 
-     Pesquisador? pesquisador = await FirebaseFirestore.instance.collection(firestoreCollectionName).limit(1).where('emailPesquisador', isEqualTo: user.email).get().then((QuerySnapshot snapshot) => Pesquisador.fromJson(snapshot.docs[0].data() as Map<String, dynamic>));
+    Pesquisador? pesquisador = await FirebaseFirestore.instance
+        .collection(firestoreCollectionName)
+        .limit(1)
+        .where('emailPesquisador', isEqualTo: user.email)
+        .get()
+        .then((QuerySnapshot snapshot) => Pesquisador.fromJson(
+            snapshot.docs[0].data() as Map<String, dynamic>));
 
     return pesquisador;
-
   }
-  
+
   Map<String, dynamic> toJson() {
     return {
-      'uuidPesquisador' : uuidPesquisador,
-      'nomePesquisador' : nomePesquisador.toUpperCase(),
-      'uuidInstituicao' : uuidInstituicao,
-      'cpfPesquisador' : cpfPesquisador,
-      'cargoPesquisador' : cargoPesquisador.toUpperCase(),
-      'emailPesquisador' : emailPesquisador.toLowerCase(),
-      'idPerfilUtilizador' : idPerfilUtilizador,
-      'icActive' : icActive,
-      'icAuthorized' : icAuthorized,
-      'firstAccess' : firstAccess,
+      'uuidPesquisador': uuidPesquisador,
+      'nomePesquisador': nomePesquisador.toUpperCase(),
+      'instituicao' : instituicao.toJson(),
+      'cpfPesquisador': cpfPesquisador,
+      'cargoPesquisador': cargoPesquisador.toUpperCase(),
+      'emailPesquisador': emailPesquisador.toLowerCase(),
+      'idPerfilUtilizador': idPerfilUtilizador,
+      'icActive': icActive,
+      'icAuthorized': icAuthorized,
+      'firstAccess': firstAccess,
     };
   }
 
   Future<void> firestoreAdd() {
-
-    CollectionReference pesquisadores = FirebaseFirestore.instance.collection(firestoreCollectionName);
+    CollectionReference pesquisadores =
+        FirebaseFirestore.instance.collection(firestoreCollectionName);
 
     return pesquisadores.doc(uuidPesquisador).set(toJson());
   }
 
-  Future<void> retrieveInstituicao() {
-    CollectionReference instituicaoRef = FirebaseFirestore.instance.collection(Instituicao.firestoreCollectionName);
-
-    return instituicaoRef.doc(uuidInstituicao).get().then((DocumentSnapshot documentSnapshot) {
-      if (documentSnapshot.exists) {
-        instituicaoInstance = Instituicao.fromJson(documentSnapshot.data() as Map<String, dynamic>);
-      }
-    });
-
-  }
-
   @override
   String toString() {
-    return 'Pesquisador: {uuidPesquisador: $uuidPesquisador, nomePesquisador: $nomePesquisador, uuidInstituicao: $uuidInstituicao, cpfPesquisador: $cpfPesquisador, cargoPesquisador: $cargoPesquisador, emailPesquisador: $emailPesquisador, idPerfilUtilizador: $idPerfilUtilizador, icActive: $icActive, icAuthorized: $icAuthorized, firstAccess: $firstAccess, instituicaoInstance: $instituicaoInstance}';
+    return 'Pesquisador{uuidPesquisador: $uuidPesquisador, nomePesquisador: $nomePesquisador, instituicao: $instituicao, cpfPesquisador: $cpfPesquisador, cargoPesquisador: $cargoPesquisador, emailPesquisador: $emailPesquisador, idPerfilUtilizador: $idPerfilUtilizador, icActive: $icActive, icAuthorized: $icAuthorized, firstAccess: $firstAccess}';
   }
+
+// Não mais usado - objeto instituição está dentro do documento do pesquisador
+// Future<void> retrieveInstituicao() {
+  //   CollectionReference instituicaoRef = FirebaseFirestore.instance
+  //       .collection(Instituicao.firestoreCollectionName);
+  //
+  //   return instituicaoRef
+  //       .doc(uuidInstituicao)
+  //       .get()
+  //       .then((DocumentSnapshot documentSnapshot) {
+  //     if (documentSnapshot.exists) {
+  //       instituicao = Instituicao.fromJson(
+  //           documentSnapshot.data() as Map<String, dynamic>);
+  //     }
+  //   });
+  // }
+
+
 }

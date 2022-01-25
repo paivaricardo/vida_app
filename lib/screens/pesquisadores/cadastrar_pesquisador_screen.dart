@@ -230,28 +230,20 @@ class _CadastrarPesquisadorScreenState extends State<CadastrarPesquisadorScreen>
         Pesquisador createdPesquisador = Pesquisador(
           uuidPesquisador: generatedUuid,
           nomePesquisador: _controllerNomePesquisador.text.toUpperCase(),
-          uuidInstituicao: selectedInstituicao!.uuidInstituicao,
+          instituicao: selectedInstituicao!,
           cpfPesquisador: _controllerCpfPesquisador.text,
           cargoPesquisador: _controllerCargoPesquisador.text,
           emailPesquisador: _controllerEmailPesquisador.text,
           idPerfilUtilizador: _dropdownPerfilUtilizadorId,
         );
 
-        await createdPesquisador.firestoreAdd().timeout(Duration(seconds: 5),
-            onTimeout: () {
-          throw TimeoutException(
-              'É necessário estar conectado para registrar um novo pesquisador.');
-        });
+        createdPesquisador.firestoreAdd();
 
         final String generatedPassword = PasswordGenerate.generatePassword();
 
-        await FirebaseAuthService()
+        FirebaseAuthService()
             .firebaseAuthRegister(
-                createdPesquisador.emailPesquisador, generatedPassword)
-            .timeout(Duration(seconds: 5), onTimeout: () {
-          throw TimeoutException(
-              'É necessário estar conectado para registrar um novo pesquisador.');
-        });
+                createdPesquisador.emailPesquisador, generatedPassword);
 
         Navigator.pop(context);
         Navigator.of(context).push(MaterialPageRoute(
@@ -295,8 +287,9 @@ class _CadastrarPesquisadorScreenState extends State<CadastrarPesquisadorScreen>
                 padding: const EdgeInsets.all(16.0),
                 child: SizedBox(
                   width: 200,
-                  height: 150,
+                  height: 220,
                   child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       Icon(
                         Icons.error,

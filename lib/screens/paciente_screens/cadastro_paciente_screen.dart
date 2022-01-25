@@ -2,10 +2,11 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
-import 'package:vida_app/local_database/dao/paciente_conhece_pics_dao.dart';
-import 'package:vida_app/local_database/dao/paciente_dao.dart';
+import 'package:vida_app/models/escolaridade_model.dart';
 import 'package:vida_app/models/paciente_model.dart';
+import 'package:vida_app/models/pesquisador_model.dart';
 
 class CadastroPacienteScreen extends StatefulWidget {
   const CadastroPacienteScreen({Key? key}) : super(key: key);
@@ -18,14 +19,9 @@ class _CadastroPacienteScreenState extends State<CadastroPacienteScreen>
     with InputValidationMixin {
   // Uuid do paciente
   var generatedUuid = Uuid().v4();
-
+  
   // Form key
   final _formKey = GlobalKey<FormState>();
-
-  // DAOs
-  final PacienteDAO _pacienteDAO = PacienteDAO();
-  final PacienteConhecePicsDAO _pacienteConhecePicsDAO =
-      PacienteConhecePicsDAO();
 
   // Member variables
   String? radioValueSexo = 'M';
@@ -45,21 +41,7 @@ class _CadastroPacienteScreenState extends State<CadastroPacienteScreen>
   bool apresentaDores = false;
 
   // Dropdown options
-  List<String> listaEscolaridade = [
-    'Fundamental - Incompleto',
-    'Fundamental - Completo',
-    'Médio - Incompleto',
-    'Médio - Completo',
-    'Superior - Incompleto',
-    'Superior - Completo',
-    'Pós-graduação (Lato senso) - Incompleto',
-    'Pós-graduação (Lato senso) - Completo',
-    'Pós-graduação (Stricto sensu, nível mestrado) - Incompleto',
-    'Pós-graduação (Stricto sensu, nível mestrado) - Completo',
-    'Pós-graduação (Stricto sensu, nível doutor) - Incompleto',
-    'Pós-graduação (Stricto sensu, nível doutor) - Completo',
-    'Ignorado'
-  ];
+  List<String> listaEscolaridade = Escolaridade.escolaridadeValues.values.toList();
   List<String> listaFrequenciaFumo = [
     'Esporadicamente',
     'Frequentemente',
@@ -67,8 +49,8 @@ class _CadastroPacienteScreenState extends State<CadastroPacienteScreen>
   ];
 
   // Dropdown variables
-  String? escolaridade = 'Fundamental - Incompleto';
-  String? frequenciaFumo = 'Esporadicamente';
+  late String? escolaridade = listaEscolaridade[0];
+  late String? frequenciaFumo = listaFrequenciaFumo[0];
 
   // Controllers
   final _controllerNome = TextEditingController();
@@ -105,6 +87,9 @@ class _CadastroPacienteScreenState extends State<CadastroPacienteScreen>
   }
 
   Widget _formUI() {
+    // Pesquisador cadastrante
+    Pesquisador pesquisadorCadastrante = Provider.of<Pesquisador?>(context)!;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
@@ -552,14 +537,10 @@ class _CadastroPacienteScreenState extends State<CadastroPacienteScreen>
                                   ? 'Não informado'
                                   : 'Nenhum'
                               : _controllerMedicamento.text,
+                          uuidPesquisadoresAutorizados: [pesquisadorCadastrante.uuidPesquisador],
                         );
 
-                        await _pacienteDAO
-                            .save(pacienteCreated)
-                            .timeout(Duration(seconds: 5), onTimeout: () {
-                          throw TimeoutException(
-                              'Tempo limite excedido para cadastro de paciente');
-                        });
+                        pacienteCreated.firestoreAdd();
 
                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                             content: Text('Paciente cadastrado com sucesso!')));

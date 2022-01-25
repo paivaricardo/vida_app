@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:vida_app/models/paciente_model.dart';
 import 'package:vida_app/screens/historico_screen/historico_paciente_main_screen.dart';
+import 'package:vida_app/screens/intervencao/registrar_intervencao_screen.dart';
 import 'package:vida_app/screens/lista_questionarios_screen.dart';
 
 class AcoesPacienteScreen extends StatelessWidget {
@@ -34,6 +35,15 @@ class AcoesPacienteScreen extends StatelessWidget {
                 title: Text('Aplicar questionário'),
                 onTap: () {
                   Navigator.of(context).push(MaterialPageRoute(builder: (context) => ListaQuestionarios(paciente)));
+                },
+              ),
+            ),
+            Card(
+              child: ListTile(
+                leading: Icon(Icons.favorite_rounded),
+                title: Text('Registrar intervenção'),
+                onTap: () {
+                  Navigator.of(context).push(MaterialPageRoute(builder: (context) => RegistrarIntervencaoScreen(paciente: paciente)));
                 },
               ),
             ),
