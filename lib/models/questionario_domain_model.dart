@@ -7,7 +7,7 @@ class QuestionarioDomain {
   static const depressaoBeckDomainValue = 3000;
   static const dorInventarioDomainValue = 4000;
   static const dorStartDomainValue = 5000;
-  static const tabagismoFargestromDomainValue = 6000;
+  static const tabagismoFagerstromDomainValue = 6000;
 
   static String tableSQL = '''
     CREATE TABLE `$tableName`
@@ -26,7 +26,7 @@ class QuestionarioDomain {
     depressaoBeckDomainValue: ['Depressão', 'ESCALA DE DEPRESSÃO DE BECK.'],
     dorInventarioDomainValue: ['Dor', 'INVENTÁRIO BREVE DA DOR.'],
     dorStartDomainValue: ['Dor', 'STarT Back Screening Tool- Brasil (SBST-Brasil).'],
-    tabagismoFargestromDomainValue: ['Tabagismo', 'TESTE DE FARGESTRÖM.'],
+    tabagismoFagerstromDomainValue: ['Tabagismo', 'TESTE DE FAGERSTRÖM'],
   };
 
   static Map<int, bool> visibleScores = {
@@ -35,7 +35,7 @@ class QuestionarioDomain {
     depressaoBeckDomainValue: true,
     dorInventarioDomainValue: false,
     dorStartDomainValue: true,
-    tabagismoFargestromDomainValue: true,
+    tabagismoFagerstromDomainValue: true,
   };
 
   static String prepSQLStringInsertInitialValues = questionarioDomainValues.entries.fold(

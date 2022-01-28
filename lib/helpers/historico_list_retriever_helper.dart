@@ -1,8 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:vida_app/models/intervencao_model.dart';
 import 'package:vida_app/models/questionario_ansiedade_model.dart';
+import 'package:vida_app/models/questionario_depressao_beck_model.dart';
 import 'package:vida_app/models/questionario_depressao_phq9_model.dart';
 import 'package:vida_app/models/questionario_domain_model.dart';
+import 'package:vida_app/models/questionario_dor_start_model.dart';
+import 'package:vida_app/models/questionario_tabagismo_fagerstrom_model.dart';
 
 class HistoricoListRetrieverHelper {
 
@@ -20,6 +23,12 @@ class HistoricoListRetrieverHelper {
             return QuestionarioAnsiedade.fromJson(element);
           case QuestionarioDomain.depressaoPHQ9DomainValue:
             return QuestionarioDepressaoPHQ9.fromJson(element);
+          case QuestionarioDomain.depressaoBeckDomainValue:
+            return QuestionarioDepressaoBeck.fromJson(element);
+          case QuestionarioDomain.dorStartDomainValue:
+            return QuestionarioDorStart.fromJson(element);
+          case QuestionarioDomain.tabagismoFagerstromDomainValue:
+            return QuestionarioTabagismoFagerstrom.fromJson(element);
         }
 
       }

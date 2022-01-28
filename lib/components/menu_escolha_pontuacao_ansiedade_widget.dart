@@ -4,12 +4,14 @@ import 'package:vida_app/models/questao_model.dart';
 class MenuEscolhaPontuacaoQuestaoWidget extends StatefulWidget {
   final String opcaoInicial;
   final List<String> opcoesMenu;
+  final int Function(String dropdownValue)? pointsAssignmentFunction;
   Questao questao;
 
   MenuEscolhaPontuacaoQuestaoWidget({
     required String this.opcaoInicial,
     required this.opcoesMenu,
     required this.questao,
+    this.pointsAssignmentFunction,
     Key? key,
   }) : super(key: key);
 
@@ -42,7 +44,13 @@ class _MenuEscolhaPontuacaoQuestaoWidgetState
       onChanged: (String? newValue) {
         setState(() {
           dropdownValue = newValue!;
-          widget.questao.pontuacao = _assignPoints(dropdownValue);
+
+          if (widget.pointsAssignmentFunction == null) {
+            widget.questao.pontuacao = _assignPoints(dropdownValue);
+          } else {
+            widget.questao.pontuacao = widget.pointsAssignmentFunction!(dropdownValue);
+          }
+
         });
       },
       items: _menuOptions.map<DropdownMenuItem<String>>((String value) {
