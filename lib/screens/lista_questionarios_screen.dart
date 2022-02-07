@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:vida_app/models/paciente_model.dart';
-import 'package:vida_app/screens/paciente_screens/questionario_tabagismo_fargestrom/questionario_tabagismo_fagerstrom_screen.dart';
 import 'package:vida_app/screens/questionario_ansiedade/questionario_ansiedade_screen.dart';
 import 'package:vida_app/screens/questionario_depressao_beck/questionario_depressao_beck_screen.dart';
 import 'package:vida_app/screens/questionario_depressao_phq9/questionario_depressao_phq9_screen.dart';
+import 'package:vida_app/screens/questionario_dor_inventario/questionario_dor_inventario_screen.dart';
 import 'package:vida_app/screens/questionario_dor_start/questionario_dor_start_screen.dart';
+import 'package:vida_app/screens/questionario_tabagismo_fargestrom/questionario_tabagismo_fagerstrom_screen.dart';
 
 class ListaQuestionarios extends StatelessWidget {
   final Paciente paciente;
@@ -83,9 +84,7 @@ class ListaQuestionarios extends StatelessWidget {
               title: Text('Dor geral'),
               subtitle: Text('INVENTÁRIO BREVE DA DOR'),
               onTap: () {
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                    content:
-                        Text('Funcionalidade a ser implentada futuramente.')));
+                Navigator.push(context, MaterialPageRoute(builder: (context) => QuestionarioDorInventarioScreen(paciente: paciente)));
               },
             )),
             Card(

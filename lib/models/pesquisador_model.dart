@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:vida_app/models/instituicao_model.dart';
 
 class Pesquisador {
@@ -63,9 +64,9 @@ class Pesquisador {
           cargoPesquisador: json['cargoPesquisador'],
           emailPesquisador: json['emailPesquisador'],
           idPerfilUtilizador: int.parse(json['idPerfilUtilizador'].toString()),
-          icActive: json['icActive'] == 'true',
-          icAuthorized: json['icAuthorized'] == 'true',
-          firstAccess: json['firstAccess'] == 'true',
+          icActive: json['icActive'],
+          icAuthorized: json['icAuthorized'],
+          firstAccess: json['firstAccess'],
         );
 
   static Future<Pesquisador?> getPesquisadorfromFirebaseAuthUser(
@@ -105,6 +106,13 @@ class Pesquisador {
         FirebaseFirestore.instance.collection(firestoreCollectionName);
 
     return pesquisadores.doc(uuidPesquisador).set(toJson());
+  }
+
+  Future<void> updateFirstAccess() {
+    DocumentReference pesquisadorDocRef = FirebaseFirestore.instance.collection(firestoreCollectionName).doc(uuidPesquisador);
+
+    return pesquisadorDocRef.update(
+        { 'firstAccess' : false });
   }
 
   @override

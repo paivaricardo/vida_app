@@ -28,7 +28,7 @@ class _MultipleChoiceDepressaoBeckQuestionWidgetState
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Text('Questão ${widget.question.ordemQuestaoDomain}', ),
-          for (int i = 0; i <= choicesQuestionMap.length - 1; i++) ...[
+          for(int i = 0; i <= choicesQuestionMap.length - 1; i++) ...[
             ListTile(
               title: Text(choicesQuestionMap[i]!),
               leading: Radio<int>(

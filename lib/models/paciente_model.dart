@@ -1,7 +1,6 @@
 import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:vida_app/models/pesquisador_model.dart';
 
 class Paciente {
   static final String tableName = 'paciente';
@@ -56,8 +55,11 @@ class Paciente {
   bool fumante;
   String frequenciaFumo;
   int cigarrosDia;
+  DateTime? dataInicioFumo;
+  DateTime? dataRegistroPaciente;
   bool fazUsoMedicamento;
   String medicamentos;
+  String? observacoes;
   bool icActive;
   bool icAcceptedDataTreatment;
   List<String?>? uuidPesquisadoresAutorizados;
@@ -79,9 +81,12 @@ class Paciente {
     required this.localDor,
     required this.fumante,
     required this.frequenciaFumo,
+    this.dataInicioFumo,
+    this.dataRegistroPaciente,
     required this.cigarrosDia,
     required this.fazUsoMedicamento,
     required this.medicamentos,
+    this.observacoes,
     this.icActive = true,
     this.icAcceptedDataTreatment = true,
     this.uuidPesquisadoresAutorizados,
@@ -106,11 +111,15 @@ class Paciente {
           fumante: json['fumante'],
           frequenciaFumo: json['frequenciaFumo'],
           cigarrosDia: json['cigarrosDia'],
+          dataInicioFumo: json['dataInicioFumo']?.toDate(),
+          dataRegistroPaciente: json['dataRegistroPaciente']?.toDate(),
           fazUsoMedicamento: json['fazUsoMedicamento'],
           medicamentos: json['medicamentos'],
+          observacoes: json['observacoes'],
           icActive: json['icActive'],
           icAcceptedDataTreatment: json['icAcceptedDataTreatment'],
-          uuidPesquisadoresAutorizados: List<String>.from(json['uuidPesquisadoresAutorizados']),
+          uuidPesquisadoresAutorizados:
+              List<String>.from(json['uuidPesquisadoresAutorizados']),
         );
 
   Map<String, dynamic> toJson() {
@@ -132,8 +141,11 @@ class Paciente {
       'fumante': fumante,
       'frequenciaFumo': frequenciaFumo,
       'cigarrosDia': cigarrosDia,
+      'dataInicioFumo': dataInicioFumo,
+      'dataRegistroPaciente': dataRegistroPaciente,
       'fazUsoMedicamento': fazUsoMedicamento,
       'medicamentos': medicamentos.toUpperCase(),
+      'observacoes': observacoes,
       'icActive': icActive,
       'icAcceptedDataTreatment': icAcceptedDataTreatment,
       'uuidPesquisadoresAutorizados': uuidPesquisadoresAutorizados,
@@ -148,11 +160,29 @@ class Paciente {
   }
 
   double calculaIMC() {
-    return altura / pow(pesoAtual, 2);
+    return ((pesoAtual / pow(altura, 2)) * pow(10, 2)).round() / pow(10, 2);
+  }
+
+  int calculaCargaTabagica() {
+    if (dataRegistroPaciente == null || dataInicioFumo == null) {
+      return -1;
+    } else {
+      double yearsSmoking =
+          (dataRegistroPaciente!.difference(dataInicioFumo!).inDays) / 365;
+
+      return (((cigarrosDia / 20) * yearsSmoking)).round();
+    }
   }
 
   @override
   String toString() {
     return 'Paciente{uuid: $uuid, nome: $nome, dataNascimento: $dataNascimento, sexo: $sexo, escolaridade: $escolaridade, profissao: $profissao, pesoAtual: $pesoAtual, altura: $altura, conhecePic: $conhecePic, quaisPicConhece: $quaisPicConhece, apresentaAnsiedade: $apresentaAnsiedade, apresentaDepressao: $apresentaDepressao, apresentaDor: $apresentaDor, localDor: $localDor, fumante: $fumante, frequenciaFumo: $frequenciaFumo, cigarrosDia: $cigarrosDia, fazUsoMedicamento: $fazUsoMedicamento, medicamentos: $medicamentos, icActive: $icActive, icAcceptedDataTreatment: $icAcceptedDataTreatment, uuidPesquisadoresAutorizados: $uuidPesquisadoresAutorizados}';
+  }
+
+  Future<String> updatePesquisadoresAutorizados() {
+    CollectionReference pacientes =
+    FirebaseFirestore.instance.collection(firestoreCollectionName);
+
+    return pacientes.doc(uuid).update({'uuidPesquisadoresAutorizados' : uuidPesquisadoresAutorizados }).then((value) => 'Success').catchError((error) => 'Error');
   }
 }

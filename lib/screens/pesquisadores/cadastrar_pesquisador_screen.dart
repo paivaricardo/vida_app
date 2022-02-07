@@ -233,7 +233,7 @@ class _CadastrarPesquisadorScreenState extends State<CadastrarPesquisadorScreen>
           instituicao: selectedInstituicao!,
           cpfPesquisador: _controllerCpfPesquisador.text,
           cargoPesquisador: _controllerCargoPesquisador.text,
-          emailPesquisador: _controllerEmailPesquisador.text,
+          emailPesquisador: _controllerEmailPesquisador.text.trim(),
           idPerfilUtilizador: _dropdownPerfilUtilizadorId,
         );
 

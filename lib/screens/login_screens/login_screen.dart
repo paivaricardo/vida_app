@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:vida_app/components/gradient_text.dart';
 import 'package:vida_app/models/pesquisador_model.dart';
+import 'package:vida_app/screens/login_screens/password_reset_screen.dart';
 import 'package:vida_app/services/firebase_auth_service.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -35,7 +36,10 @@ class _LoginScreenState extends State<LoginScreen> {
               .of(context)
               .size
               .width,
-          height: MediaQuery
+          height: MediaQuery.of(context).orientation == Orientation.landscape ? MediaQuery
+              .of(context)
+              .size
+              .height * 1.2 : MediaQuery
               .of(context)
               .size
               .height,
@@ -105,15 +109,20 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                         Align(
                             alignment: Alignment.centerRight,
-                            child: Text(
-                              'Esqueceu a senha?',
-                              style: TextStyle(
-                                  color: Colors.indigo.shade900,
-                                  fontFamily: 'Comfortaa'),
+                            child: TextButton(
+                              onPressed: () {
+                                Navigator.push(context, MaterialPageRoute(builder: (context) => PasswordResetScreen()));
+                              },
+                              child: Text(
+                                'Esqueceu a senha?',
+                                style: TextStyle(
+                                    color: Colors.indigo.shade900,
+                                    fontFamily: 'Comfortaa'),
+                              ),
                             )),
                         loginErrorVisibility(),
                         Padding(
-                          padding: const EdgeInsets.only(top: 8.0),
+                          padding: const EdgeInsets.only(top: 0.0),
                           child: loginButton(),
                         )
                       ],
@@ -125,12 +134,44 @@ class _LoginScreenState extends State<LoginScreen> {
                 alignment: Alignment.bottomCenter,
                 child: Padding(
                   padding: const EdgeInsets.only(bottom: 8.0),
-                  child: Text(
-                    'Ainda não possui cadastro?',
-                    style: TextStyle(
-                        fontFamily: 'Comfortaa',
-                        fontSize: 18.0,
-                        color: Colors.indigo.shade900),
+                  child: TextButton(
+                    onPressed: () => showDialog(context: context, builder: (context) => Dialog(
+                      insetAnimationCurve: Curves.ease,
+                      shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(16))
+                      ),
+                      insetPadding: const EdgeInsets.all(32.0),
+                      child: Padding(
+                        padding: const EdgeInsets.all(24.0),
+                        child: SizedBox(
+                          width: 100,
+                          height: 300,
+                          child: Center(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                Text('Este aplicativo é parte integrante de um projeto de pesquisa desenvolvido pela Universidade Federal do Amapá (UNIFAP), acerca de Práticas Integrativas e Complementares em Saúde (PICS).', style: TextStyle(fontFamily: 'Comfortaa')),
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 12.0),
+                                  child: Text('Por enquanto, o acesso ao aplicativo está restrito aos participantes da pesquisa.', style: TextStyle(fontFamily: 'Comfortaa')),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 12.0),
+                                  child: Text('Entre em contato com o coordenador para mais informações e para solicitar o seu cadastro.', style: TextStyle(fontFamily: 'Comfortaa')),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    )),
+                    child: Text(
+                      'Ainda não possui cadastro?',
+                      style: TextStyle(
+                          fontFamily: 'Comfortaa',
+                          fontSize: 18.0,
+                          color: Colors.indigo.shade900),
+                    ),
                   ),
                 ),
               ),
@@ -142,7 +183,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Widget loginButton() {
-    if (loginButtonPressed == true) {
+    if (loginButtonPressed) {
       return SizedBox(
         width: 150,
         height: 50,
@@ -216,8 +257,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
     try {
       Pesquisador? pesquisadorLogado =
-      await _firebaseAuthService.firebaseAuthsignIn(
-          _emailController.text,
+      await _firebaseAuthService.firebaseAuthSignIn(
+          _emailController.text.trim(),
           _passwordController.text).timeout(
           Duration(seconds: 5), onTimeout: () {
         throw TimeoutException(

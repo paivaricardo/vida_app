@@ -7,7 +7,6 @@ import 'package:vida_app/models/paciente_model.dart';
 import 'package:vida_app/models/questao_questionario_domain_model.dart';
 import 'package:vida_app/models/questionario_domain_model.dart';
 import 'package:vida_app/models/questionario_model.dart';
-import 'package:vida_app/screens/questionario_depressao_phq9/questionario_depressao_phq9_resultado_screen.dart';
 import 'package:vida_app/screens/questionario_dor_start/questionario_dor_start_resultado_screen.dart';
 
 class QuestionarioDorStart extends Questionario {
@@ -177,7 +176,7 @@ class QuestionarioDorStart extends Questionario {
                           visible: QuestionarioDomain
                               .visibleScores[idQuestionarioDomain]!,
                           child: Text(
-                            'Score: ${pontuacaoQuestionario}',
+                            'Score (9 i.): ${pontuacaoQuestionario}, SEPS (5-9 i.): ${pontuacaoSubescalaPsicossocial}',
                             style: TextStyle(
                                 fontSize: 16.0, color: Colors.deepOrange),
                           )),

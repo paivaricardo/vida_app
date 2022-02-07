@@ -71,7 +71,7 @@ class _PesquisadoresScreenState extends State<PesquisadoresScreen> {
                       itemBuilder: (context, index) {
                         return Card(
                           child: ListTile(
-                            leading: Icon(Icons.home),
+                            leading: Icon(Icons.smart_toy_rounded),
                             title: Text(pesquisadores[index].nomePesquisador),
                             subtitle:
                                 Text(pesquisadores[index].cargoPesquisador),

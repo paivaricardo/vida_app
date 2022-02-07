@@ -23,6 +23,16 @@ class DateTimeHelper {
     return returnValue;
   }
 
+  static String retrieveFormattedDateFilename(DateTime? dateTime) {
+    String returnValue;
+
+    returnValue = dateTime == null
+        ? 'data_invalida'
+        : '${dateTime.day}_${dateTime.month}_${dateTime.year}';
+
+    return returnValue;
+  }
+
   static DateTime dateParse(String date) {
     return DateTime(int.parse(date.substring(6, 10)),
         int.parse(date.substring(3, 5)), int.parse(date.substring(0, 2)));

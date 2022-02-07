@@ -7,7 +7,7 @@ import 'package:vida_app/models/paciente_model.dart';
 import 'package:vida_app/models/questao_questionario_domain_model.dart';
 import 'package:vida_app/models/questionario_domain_model.dart';
 import 'package:vida_app/models/questionario_model.dart';
-import 'package:vida_app/screens/paciente_screens/questionario_tabagismo_fargestrom/questionario_tabagismo_fagerstrom_resultado_screen.dart';
+import 'package:vida_app/screens/questionario_tabagismo_fargestrom/questionario_tabagismo_fagerstrom_resultado_screen.dart';
 
 class QuestionarioTabagismoFagerstrom extends Questionario {
   static int idQuestionarioTabagismoFagerstromDomain =
@@ -174,7 +174,7 @@ class QuestionarioTabagismoFagerstrom extends Questionario {
                           visible: QuestionarioDomain
                               .visibleScores[idQuestionarioDomain]!,
                           child: Text(
-                            'Score: ${pontuacaoQuestionario}',
+                            'Score: ${pontuacaoQuestionario} (${interpretacaoPontuacaoQuestionario})',
                             style: TextStyle(
                                 fontSize: 16.0, color: Colors.deepOrange),
                           )),

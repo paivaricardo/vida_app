@@ -220,7 +220,7 @@ class QuestionarioAnsiedade extends Questionario {
                           visible: QuestionarioDomain
                               .visibleScores[idQuestionarioDomain]!,
                           child: Text(
-                            'Score: ${pontuacaoQuestionario}',
+                            'Score: ${pontuacaoQuestionario} (${interpretacaoPontuacaoQuestionario})',
                             style: TextStyle(
                                 fontSize: 16.0, color: Colors.deepOrange),
                           )),

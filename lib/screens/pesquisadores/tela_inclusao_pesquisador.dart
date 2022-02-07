@@ -33,7 +33,7 @@ class TelaInclusaoPesquisador extends StatelessWidget {
                   SelectableText(userPassword, style: TextStyle(fontSize: 24.0, color: Colors.deepOrange),),
               Padding(
                 padding: const EdgeInsets.only(top: 16.0),
-                child: Text('Informe ao pesquisador o e-mail e a senha acima para acesso ao sistema. No primeiro acesso, será necessário trocar a senha por outra.'),
+                child: Text('Informe ao pesquisador o e-mail e a senha acima para acesso ao sistema. Será enviado uma mensagem obrigatória de confirmação à caixa de endereço de e-mail informada. Além disso, no primeiro acesso, será necessário trocar a senha por outra.'),
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 16.0),
@@ -41,7 +41,7 @@ class TelaInclusaoPesquisador extends StatelessWidget {
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 16.0),
-                child: Text('Após o fechamento desta tela, o usuário atual será desautenticado. Será necessário autenticar novamente.'),
+                child: Text('Após o fechamento desta tela, o usuário atual será desautenticado. Será necessário autenticar-se novamente.'),
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 16.0),

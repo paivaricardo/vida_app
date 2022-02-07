@@ -22,10 +22,10 @@ class QuestionarioDomain {
 
   static Map<int, List<String>> questionarioDomainValues = {
     ansiedadeBAIDomainValue: ['Ansiedade', 'BAI (INVENTÁRIO DE ANSIEDADE DE BECK)'],
-    depressaoPHQ9DomainValue: ['Depressão', 'Patient Health Questionnaire-9 (PHQ-9).'],
-    depressaoBeckDomainValue: ['Depressão', 'ESCALA DE DEPRESSÃO DE BECK.'],
-    dorInventarioDomainValue: ['Dor', 'INVENTÁRIO BREVE DA DOR.'],
-    dorStartDomainValue: ['Dor', 'STarT Back Screening Tool- Brasil (SBST-Brasil).'],
+    depressaoPHQ9DomainValue: ['Depressão', 'Patient Health Questionnaire-9 (PHQ-9)'],
+    depressaoBeckDomainValue: ['Depressão', 'ESCALA DE DEPRESSÃO DE BECK'],
+    dorInventarioDomainValue: ['Dor', 'INVENTÁRIO BREVE DA DOR'],
+    dorStartDomainValue: ['Dor', 'STarT Back Screening Tool- Brasil (SBST-Brasil)'],
     tabagismoFagerstromDomainValue: ['Tabagismo', 'TESTE DE FAGERSTRÖM'],
   };
 

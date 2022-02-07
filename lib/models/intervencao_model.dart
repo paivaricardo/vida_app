@@ -94,7 +94,7 @@ class Intervencao {
               children: [
                 Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: Icon(Icons.list_alt_rounded),
+                  child: Icon(Icons.favorite_rounded),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),

@@ -5,7 +5,7 @@ import 'package:vida_app/components/multiple_choice_tabagismo_fagerstrom_questio
 import 'package:vida_app/models/paciente_model.dart';
 import 'package:vida_app/models/pesquisador_model.dart';
 import 'package:vida_app/models/questionario_tabagismo_fagerstrom_model.dart';
-import 'package:vida_app/screens/paciente_screens/questionario_tabagismo_fargestrom/questionario_tabagismo_fagerstrom_resultado_screen.dart';
+import 'package:vida_app/screens/questionario_tabagismo_fargestrom/questionario_tabagismo_fagerstrom_resultado_screen.dart';
 
 class QuestionarioTabagismoFagerstromScreen extends StatefulWidget {
   final Paciente paciente;
@@ -73,6 +73,21 @@ class _QuestionarioTabagismoFagerstromScreenState
                 ),
                 Divider(),
                 Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    widget.paciente.sexo == 'F' ? 'Carga tabágica da paciente:' : widget.paciente.sexo == 'M' ? 'Carga tabágica do paciente:' : 'Carga tabágica do(a) paciente:',
+                      style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    widget.paciente.calculaCargaTabagica() == -1 ? 'SEM INFORMAÇÄO' : '${widget.paciente.calculaCargaTabagica().toString()} anos-maço',
+                    style: TextStyle(fontSize: 16.0),
+                  ),
+                ),
+                Divider(),
+                Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 8.0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -80,6 +95,7 @@ class _QuestionarioTabagismoFagerstromScreenState
                       TextFormField(
                         decoration: InputDecoration(
                             labelText: 'Observações'),
+                        maxLength: 400,
                         controller: _observacoesQuestionarioTabagismoFagerstrom,
                       ),
                     ],

@@ -6,20 +6,23 @@ import 'package:flutter/material.dart';
 import 'package:vida_app/helpers/datetime_helper.dart';
 import 'package:vida_app/models/questao_questionario_domain_model.dart';
 import 'package:vida_app/models/questionario_domain_model.dart';
-import 'package:vida_app/models/questionario_dor_start_model.dart';
+import 'package:vida_app/models/questionario_tabagismo_fagerstrom_model.dart';
 import 'package:vida_app/screens/pdf_view_screen/pdf_view_screen.dart';
 
-class ResultadoQuestionarioDorStartScreen extends StatelessWidget {
-  final QuestionarioDorStart questionario;
+class ResultadoQuestionarioTabagismoFagerstromScreen extends StatelessWidget {
+  final QuestionarioTabagismoFagerstrom questionario;
 
-  ResultadoQuestionarioDorStartScreen({required this.questionario, Key? key})
+  ResultadoQuestionarioTabagismoFagerstromScreen(
+      {required this.questionario, Key? key})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    questionario.questoes.forEach((key, value) => print(value));
+
     return Scaffold(
       appBar: AppBar(
-        title: Text('Resultado do questionário de dor STarT'),
+        title: Text('Resultado do questionário - TESTE DE FAGERSTRÖM'),
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -27,7 +30,7 @@ class ResultadoQuestionarioDorStartScreen extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Text(
-                QuestionarioDomain.questionarioDomainValues[QuestionarioDomain.dorStartDomainValue]![1],
+                'TESTE DE FAGERSTRÖM',
                 style: TextStyle(
                   fontSize: 18.0,
                   fontWeight: FontWeight.bold,
@@ -91,7 +94,7 @@ class ResultadoQuestionarioDorStartScreen extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Text(
-                'SCORE (9 itens): ${questionario.pontuacaoQuestionario.toString()}',
+                'SCORE: ${questionario.pontuacaoQuestionario.toString()}',
                 style: TextStyle(
                   fontSize: 18.0,
                   fontWeight: FontWeight.bold,
@@ -101,11 +104,25 @@ class ResultadoQuestionarioDorStartScreen extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Text(
-                'SCORE (Subescala psicossocial 5 - 9 Itens): ${questionario.pontuacaoSubescalaPsicossocial.toString()}',
+                questionario.interpretacaoPontuacaoQuestionario,
                 style: TextStyle(
                   fontSize: 18.0,
                   fontWeight: FontWeight.bold,
                 ),
+              ),
+            ),
+            Divider(),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                questionario.paciente.sexo == 'F' ? 'Carga tabágica da paciente:' : questionario.paciente.sexo == 'M' ? 'Carga tabágica do paciente:' : 'Carga tabágica do(a) paciente:',
+                  style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                questionario.paciente.calculaCargaTabagica() == -1 ? 'SEM INFORMAÇÃO' : '${questionario.paciente.calculaCargaTabagica().toString()} anos-maço',
               ),
             ),
             Divider(),
@@ -117,7 +134,7 @@ class ResultadoQuestionarioDorStartScreen extends StatelessWidget {
                 )),
             Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Text(questionario.observacoes),
+              child: Text(questionario.observacoes.isEmpty ? 'SEM OBSERVAÇÕES' : questionario.observacoes),
             ),
             Divider(),
             ListView.builder(
@@ -125,39 +142,44 @@ class ResultadoQuestionarioDorStartScreen extends StatelessWidget {
                 physics: NeverScrollableScrollPhysics(),
                 itemCount: questionario.questoes.length,
                 itemBuilder: (context, index) {
-                  return Container(
-                    width: MediaQuery.of(context).size.width * 0.9,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Padding(
-                          padding: EdgeInsets.only(top: 12.0),
-                          child: Text(
+                  return Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Container(
+                      width: MediaQuery.of(context).size.width,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Text(
                               '${questionario.questoes[index + 1]!.ordemQuestaoDomain}. ${questionario.questoes[index + 1]!.descricao}'),
-                        ),
-                            () {
-                          if (index + 1 <= 8) {
-                            return Text(
-                                QuestaoQuestionarioDomain
-                                    .questionarioDorStartAnswers1to8[
-                                questionario
-                                    .questoes[index + 1]!.pontuacao]!,
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold));
-                          } else {
-                            return Text(
-                                QuestaoQuestionarioDomain
-                                    .questionarioDorStartAnswers9[questionario
-                                    .questoes[index + 1]!.pontuacao]!
-                                    .toString(),
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold));
-                          }
-                        }(),
-                      ],
+                          Text(
+                            '(${questionario.questoes[index + 1]!.pontuacao}) ${QuestaoQuestionarioDomain.questionarioTabagismoFagerstromQuestoesChoices[questionario.questoes[index + 1]!.ordemQuestaoDomain]![questionario.questoes[index + 1]!.pontuacao]}',
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      ),
                     ),
                   );
                 }),
+            DataTable(
+              columns: <DataColumn>[
+                DataColumn(label: Text('Pontuação')),
+                DataColumn(label: Text('Dependência')),
+              ],
+              rows: <DataRow>[
+                DataRow(cells: <DataCell>[
+                  DataCell(Text('0 a 4')),
+                  DataCell(Text('Dependência leve')),
+                ]),
+                DataRow(cells: <DataCell>[
+                  DataCell(Text('5 a 7')),
+                  DataCell(Text('Dependência moderada')),
+                ]),
+                DataRow(cells: <DataCell>[
+                  DataCell(Text('0 a 4')),
+                  DataCell(Text('Dependência grave')),
+                ]),
+              ],
+            ),
             Padding(
               padding: const EdgeInsets.only(top: 32.0),
               child: Row(
@@ -207,7 +229,8 @@ class ResultadoQuestionarioDorStartScreen extends StatelessWidget {
                       padding: const pw.EdgeInsets.all(8.0),
                       child: pw.Text(
                         QuestionarioDomain.questionarioDomainValues[
-                            QuestionarioDomain.dorStartDomainValue]![1],
+                            QuestionarioDomain
+                                .tabagismoFagerstromDomainValue]![1],
                         style: pw.TextStyle(
                           fontSize: 14.0,
                           fontWeight: pw.FontWeight.bold,
@@ -263,7 +286,7 @@ class ResultadoQuestionarioDorStartScreen extends StatelessWidget {
             pw.Divider(),
             pw.Padding(
                 padding: const pw.EdgeInsets.all(8.0),
-                child: pw.Text('Observações:')),
+                child: pw.Text('Observações:', style: pw.TextStyle(fontWeight: pw.FontWeight.bold))),
             pw.Padding(
               padding: const pw.EdgeInsets.all(8.0),
               child: pw.Text(questionario.observacoes),
@@ -272,11 +295,19 @@ class ResultadoQuestionarioDorStartScreen extends StatelessWidget {
             pw.Padding(
                 padding: const pw.EdgeInsets.all(8.0),
                 child: pw.Text(
-                    'SCORE (9 itens): ${questionario.pontuacaoQuestionario.toString()}')),
+                    'SCORE: ${questionario.pontuacaoQuestionario.toString()}', style: pw.TextStyle(fontWeight: pw.FontWeight.bold))),
             pw.Padding(
                 padding: const pw.EdgeInsets.all(8.0),
-                child: pw.Text(
-                    'SCORE (Subescala psicossocial (5 - 9 itens): ${questionario.pontuacaoSubescalaPsicossocial.toString()}')),
+                child:
+                    pw.Text(questionario.interpretacaoPontuacaoQuestionario)),
+            pw.Divider(),
+            pw.Padding(
+                padding: const pw.EdgeInsets.all(8.0),
+                child: pw.Text(questionario.paciente.sexo == 'F' ? 'Carga tabágica da paciente:' : questionario.paciente.sexo == 'M' ? 'Carga tabágica do paciente:' : 'Carga tabágica do(a) paciente:', style: pw.TextStyle(fontWeight: pw.FontWeight.bold))),
+            pw.Padding(
+                padding: const pw.EdgeInsets.all(8.0),
+                child:
+                    pw.Text(questionario.paciente.calculaCargaTabagica() == -1 ? 'SEM INFORMAÇÃO' : '${questionario.paciente.calculaCargaTabagica().toString()} anos-maço')),
             pw.Divider(),
             pw.ListView.builder(
                 itemCount: questionario.questoes.length,
@@ -291,25 +322,10 @@ class ResultadoQuestionarioDorStartScreen extends StatelessWidget {
                           child: pw.Text(
                               '${questionario.questoes[index + 1]!.ordemQuestaoDomain}. ${questionario.questoes[index + 1]!.descricao}'),
                         ),
-                        () {
-                          if (index + 1 <= 8) {
-                            return pw.Text(
-                                QuestaoQuestionarioDomain
-                                        .questionarioDorStartAnswers1to8[
-                                    questionario
-                                        .questoes[index + 1]!.pontuacao]!,
-                                style: pw.TextStyle(
-                                    fontWeight: pw.FontWeight.bold));
-                          } else {
-                            return pw.Text(
-                                QuestaoQuestionarioDomain
-                                    .questionarioDorStartAnswers9[questionario
-                                        .questoes[index + 1]!.pontuacao]!
-                                    .toString(),
-                                style: pw.TextStyle(
-                                    fontWeight: pw.FontWeight.bold));
-                          }
-                        }(),
+                        pw.Text(
+                          '(${questionario.questoes[index + 1]!.pontuacao}) ${QuestaoQuestionarioDomain.questionarioTabagismoFagerstromQuestoesChoices[questionario.questoes[index + 1]!.ordemQuestaoDomain]![questionario.questoes[index + 1]!.pontuacao]}',
+                          style: pw.TextStyle(fontWeight: pw.FontWeight.bold),
+                        ),
                       ],
                     ),
                   );

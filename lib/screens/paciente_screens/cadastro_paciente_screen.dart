@@ -4,22 +4,25 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
+import 'package:vida_app/components/dialog_assinatura_termo_tratamento_dados.dart';
+import 'package:vida_app/helpers/datetime_helper.dart';
 import 'package:vida_app/models/escolaridade_model.dart';
 import 'package:vida_app/models/paciente_model.dart';
+import 'package:vida_app/models/paciente_signature_model.dart';
 import 'package:vida_app/models/pesquisador_model.dart';
 
 class CadastroPacienteScreen extends StatefulWidget {
   const CadastroPacienteScreen({Key? key}) : super(key: key);
 
   @override
-  _CadastroPacienteScreenState createState() => _CadastroPacienteScreenState();
+  CadastroPacienteScreenState createState() => CadastroPacienteScreenState();
 }
 
-class _CadastroPacienteScreenState extends State<CadastroPacienteScreen>
+class CadastroPacienteScreenState extends State<CadastroPacienteScreen>
     with InputValidationMixin {
   // Uuid do paciente
   var generatedUuid = Uuid().v4();
-  
+
   // Form key
   final _formKey = GlobalKey<FormState>();
 
@@ -41,7 +44,8 @@ class _CadastroPacienteScreenState extends State<CadastroPacienteScreen>
   bool apresentaDores = false;
 
   // Dropdown options
-  List<String> listaEscolaridade = Escolaridade.escolaridadeValues.values.toList();
+  List<String> listaEscolaridade =
+      Escolaridade.escolaridadeValues.values.toList();
   List<String> listaFrequenciaFumo = [
     'Esporadicamente',
     'Frequentemente',
@@ -57,6 +61,7 @@ class _CadastroPacienteScreenState extends State<CadastroPacienteScreen>
   final _controllerProfissao = TextEditingController();
   final _controllerPesoAtual = TextEditingController();
   final _controllerAltura = TextEditingController();
+  final _controllerObservacoes = TextEditingController();
 
   // Controllers data de nascimento
   final _controllerDiaNascimento = TextEditingController();
@@ -66,7 +71,12 @@ class _CadastroPacienteScreenState extends State<CadastroPacienteScreen>
   // Hidden controllers
   final _controllerLocalDor = TextEditingController();
   final _controllerCigarrosDia = TextEditingController();
+  final _controllerDataInicioFumo = TextEditingController();
   final _controllerMedicamento = TextEditingController();
+
+  // Assinatura e aceitação do termo de tratamento de dados pessoais
+  bool aceitaTratamento = false;
+  PacienteSignatureModel? pacienteSignature;
 
   @override
   Widget build(BuildContext context) {
@@ -284,7 +294,7 @@ class _CadastroPacienteScreenState extends State<CadastroPacienteScreen>
         ),
         Row(
           children: [
-            Text('Conhece alguma PIC?'),
+            Text('Conhece alguma PICS?'),
             Checkbox(
                 value: conhecePic,
                 onChanged: (bool? value) {
@@ -449,11 +459,62 @@ class _CadastroPacienteScreenState extends State<CadastroPacienteScreen>
                 ),
               ),
               TextFormField(
-                decoration:
-                    InputDecoration(labelText: 'Quantos cigarros por dia?'),
-                maxLength: 2,
+                decoration: InputDecoration(
+                    labelText:
+                        'Quantos cigarros por dia (inteiro ou decimal)?'),
+                maxLength: 4,
                 controller: _controllerCigarrosDia,
                 keyboardType: TextInputType.number,
+                validator: (numberCigarros) {
+                  if (numberCigarros != null && numberCigarros.isNotEmpty) {
+                    if (double.tryParse(numberCigarros) != null &&
+                        double.tryParse(numberCigarros)! <= 0) {
+                      return 'É necessário informar um número superior a zero (inteiro ou decimal)';
+                    }
+                  } else {
+                    return 'É necessário informar o número de cigarros';
+                  }
+                },
+              ),
+              TextFormField(
+                decoration: InputDecoration(
+                    labelText: 'Desde que data fuma (aproximadamente)?'),
+                maxLength: 10,
+                controller: _controllerDataInicioFumo,
+                keyboardType: TextInputType.number,
+                validator: (dataDesdeQuando) {
+                  if (dataDesdeQuando == null ||
+                      DateTimeHelper.regExpData.hasMatch(dataDesdeQuando)) {
+                    if (dataDesdeQuando != null) {
+                      if (DateTimeHelper.dateParse(dataDesdeQuando)
+                              .isBefore(DateTime.now()) ||
+                          DateTimeHelper.dateParse(dataDesdeQuando)
+                              .isAtSameMomentAs(DateTime.now())) {
+                        if (_controllerAnoNascimento.text.isNotEmpty &&
+                            _controllerMesNascimento.text.isNotEmpty &&
+                            _controllerDiaNascimento.text.isNotEmpty) {
+                          if (DateTimeHelper.dateParse(dataDesdeQuando).isAfter(
+                              DateTime(
+                                  int.parse(_controllerAnoNascimento.text),
+                                  int.parse(_controllerMesNascimento.text),
+                                  int.parse(_controllerDiaNascimento.text)))) {
+                            return null;
+                          } else {
+                            return 'A data deve ser posterior ao nascimento do paciente';
+                          }
+                        }
+
+                        return null;
+                      } else {
+                        return 'A data deve ser anterior ao dia de hoje.';
+                      }
+                    }
+                    return null;
+                  } else {
+                    return 'Digite uma data válida.';
+                  }
+                },
+                inputFormatters: [DateTimeHelper.dateMaskFormatter],
               ),
             ],
           ),
@@ -479,6 +540,13 @@ class _CadastroPacienteScreenState extends State<CadastroPacienteScreen>
             controller: _controllerMedicamento,
           ),
         ),
+        TextFormField(
+          decoration: InputDecoration(
+            labelText: 'Observações',
+          ),
+          maxLength: 400,
+          controller: _controllerObservacoes,
+        ),
         Padding(
           padding: const EdgeInsets.only(top: 16.0),
           child: Row(
@@ -498,56 +566,97 @@ class _CadastroPacienteScreenState extends State<CadastroPacienteScreen>
                   onPressed: () async {
                     if (_formKey.currentState!.validate()) {
                       try {
-                        Paciente pacienteCreated = Paciente(
-                          uuid: generatedUuid,
-                          nome: _controllerNome.text.toUpperCase(),
-                          dataNascimento: DateTime(
-                            int.parse(_controllerAnoNascimento.text),
-                            int.parse(_controllerMesNascimento.text),
-                            int.parse(_controllerDiaNascimento.text),
-                          ),
-                          sexo: radioValueSexo!,
-                          escolaridade: escolaridade!,
-                          profissao: _controllerProfissao.text,
-                          pesoAtual: double.parse(_controllerPesoAtual.text),
-                          altura: double.parse(_controllerAltura.text),
-                          conhecePic: conhecePic,
-                          quaisPicConhece: {
-                            'Reflexologia podal': conheceReflexologiaPodal,
-                            'Aromaterapia': conheceAromaterapia,
-                            'Auriculoterapia': conheceAuriculoTerapia,
-                            'Cromoterapia': conheceCromoterapia,
-                          },
-                          apresentaAnsiedade: apresentaAnsiedade,
-                          apresentaDepressao: apresentaDepressao,
-                          apresentaDor: apresentaDores,
-                          localDor: _controllerLocalDor.text.isEmpty
-                              ? 'Sem dor'
-                              : _controllerLocalDor.text,
-                          fumante: fumante,
-                          frequenciaFumo:
-                              fumante ? frequenciaFumo! : 'Não fumante',
-                          cigarrosDia: int.parse(
-                              _controllerCigarrosDia.text.isEmpty || !fumante
-                                  ? '0'
-                                  : _controllerCigarrosDia.text),
-                          fazUsoMedicamento: fazUsoMedicamento,
-                          medicamentos: _controllerMedicamento.text.isEmpty
-                              ? fazUsoMedicamento
-                                  ? 'Não informado'
-                                  : 'Nenhum'
-                              : _controllerMedicamento.text,
-                          uuidPesquisadoresAutorizados: [pesquisadorCadastrante.uuidPesquisador],
-                        );
+                        // Mostrar caixa de diálogo de aprovação de tratamento de dados
 
-                        pacienteCreated.firestoreAdd();
+                        pacienteSignature = await showDialog(
+                            context: context,
+                            builder: (context) {
+                              return StatefulBuilder(
+                                  builder: (context, setState) {
+                                return DialogAssinaturaTermoTratamentoDados(
+                                  pacienteUuid: generatedUuid,
+                                  pacienteNome:
+                                      _controllerNome.text.toUpperCase(),
+                                );
+                              });
+                            });
 
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                            content: Text('Paciente cadastrado com sucesso!')));
+                        if (pacienteSignature == null) {
+                          aceitaTratamento = false;
+                        } else {
+                          aceitaTratamento = true;
+                        }
 
-                        Navigator.pop(context);
-                      } catch (error) {
+                        if (aceitaTratamento) {
+                          Paciente pacienteCreated = Paciente(
+                            uuid: generatedUuid,
+                            nome: _controllerNome.text.toUpperCase(),
+                            dataNascimento: DateTime(
+                              int.parse(_controllerAnoNascimento.text),
+                              int.parse(_controllerMesNascimento.text),
+                              int.parse(_controllerDiaNascimento.text),
+                            ),
+                            sexo: radioValueSexo!,
+                            escolaridade: escolaridade!,
+                            profissao: _controllerProfissao.text,
+                            pesoAtual: double.parse(_controllerPesoAtual.text),
+                            altura: double.parse(_controllerAltura.text),
+                            conhecePic: conhecePic,
+                            quaisPicConhece: {
+                              'Reflexologia podal': conheceReflexologiaPodal,
+                              'Aromaterapia': conheceAromaterapia,
+                              'Auriculoterapia': conheceAuriculoTerapia,
+                              'Cromoterapia': conheceCromoterapia,
+                            },
+                            apresentaAnsiedade: apresentaAnsiedade,
+                            apresentaDepressao: apresentaDepressao,
+                            apresentaDor: apresentaDores,
+                            localDor: _controllerLocalDor.text.isEmpty
+                                ? 'Sem dor'
+                                : _controllerLocalDor.text,
+                            fumante: fumante,
+                            frequenciaFumo:
+                                fumante ? frequenciaFumo! : 'Não fumante',
+                            cigarrosDia: int.parse(
+                                _controllerCigarrosDia.text.isEmpty || !fumante
+                                    ? '0'
+                                    : _controllerCigarrosDia.text),
+                            dataInicioFumo:
+                                _controllerDataInicioFumo.text.isEmpty
+                                    ? null
+                                    : DateTimeHelper.dateParse(
+                                        _controllerDataInicioFumo.text),
+                            dataRegistroPaciente: DateTime.now(),
+                            fazUsoMedicamento: fazUsoMedicamento,
+                            medicamentos: _controllerMedicamento.text.isEmpty
+                                ? fazUsoMedicamento
+                                    ? 'Não informado'
+                                    : 'Nenhum'
+                                : _controllerMedicamento.text,
+                            observacoes: _controllerObservacoes.text.isEmpty
+                                ? 'SEM OBSERVAÇÕES'
+                                : _controllerObservacoes.text.toUpperCase(),
+                            uuidPesquisadoresAutorizados: [
+                              pesquisadorCadastrante.uuidPesquisador
+                            ],
+                          );
+
+                          pacienteCreated.firestoreAdd();
+                          pacienteSignature!.firestoreAdd();
+
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              content:
+                                  Text('Paciente cadastrado com sucesso!')));
+
+                          Navigator.pop(context);
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              content: Text(
+                                  'Não é possível o cadastro e participação do paciente sem a leitura e assinatura do termo de aceite para tratamento de dados pessoais')));
+                        }
+                      } catch (error, stacktrace) {
                         debugPrint(error.toString());
+                        print(stacktrace.toString());
 
                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                             content: Text(

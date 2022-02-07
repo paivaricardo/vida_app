@@ -50,7 +50,7 @@ class QuestaoQuestionarioDomain {
     7: 'Nas últimas duas semanas, quantos dias o(a) sr.(a) teve dificuldade para se concentrar nas coisas (como ler o jornal ou ver televisão)?',
     8: 'Nas últimas duas semanas, quantos dias o(a) sr.(a) teve lentidão para se movimentar ou falar (a ponto das outras pessoas perceberem), ou ao contrário, esteve tão agitado(a) que você ficava andando de um lado para o outro mais do que de costume?',
     9: 'Nas últimas duas semanas, quantos dias o(a) sr.(a) pensou em se ferir de alguma maneira ou que seria melhor estar morto(a)?',
-    10: 'Considerando as últimas duas semanas, os sintomas anteriores lhe causaram algum tipo de dificuldade para trabalhar ou estudar ou tomar conta das coisas em casa ou para se relacionar com as pessoas?',
+    10: 'Considerando as últimas duas semanas, os sintomas anteriores lhe causaram algum tipo de dificuldade para trabalhar ou estudar ou tomar conta_screens das coisas em casa ou para se relacionar com as pessoas?',
   };
 
   static Map<int, String> questionarioDepressaoPHQ9Answers1to9 = {
@@ -89,6 +89,25 @@ class QuestaoQuestionarioDomain {
     19: {0: 'não perdi muito peso se é que perdi algum ultimamente', 1: 'perdi mais de 2,5 kg estou deliberadamente', 2: 'perdi mais de 5,0 kg tentando perder peso', 3: 'perdi mais de 7,0 kg comendo menos'},
     20: {0: 'não me preocupo mais do que de hábito com minha saúde', 1: 'preocupo-me com problemas físicos como dores e aflições, ou perturbações no estômago, ou prisões de ventre', 2: 'estou preocupado(a) com problemas físicos e é difícil pensar em muito mais do que isso', 3: 'estou tão preocupado(a) em ter problemas físicos que não consigo pensar em outra coisa'},
     21: {0: 'não tenho observado qualquer mudança recente em meu interesse sexual', 1: 'estou menos interessado(a) por sexo do que costumava', 2: 'estou bem menos interessado(a) por sexo atualmente', 3: 'perdi completamente o interesse por sexo'},
+  };
+
+  static Map<int, String> questionarioDorInventarioQuestoesValues = {
+    1: '1) Durante a vida, a maioria das pessoas apresenta dor de vez em quando (dor de cabeça, dor de dente, etc.). Você teve, hoje, dor diferente dessas?',
+    2: '2) Marque, sobre o diagrama, as áreas onde você sente dor, e onde a dor é mais intensa.',
+    3: '3) Selecione o número que melhor descreve a pior dor que você sentiu nas últimas 24 horas.',
+    4: '4) Selecione o número que melhor descreve a dor mais fraca que você sentiu nas últimas 24 horas.',
+    5: '5) Selecione o número que melhor descreve a média da sua dor.',
+    6: '6) Selecione o número que mostra quanta dor você está sentindo agora (neste momento).',
+    7: '7) Quais tratamentos ou medicações você está recebendo para dor?',
+    8: '8) Nas últimas 24 horas, qual a intensidade da melhora proporcionada pelos tratamentos ou medicações que você está usando? Selecione o  percentual de alívio que você obteve.',
+    9: '9) Selecione o número que melhor descreve como, nas últimas 24 horas, a dor interferiu na sua:',
+    10: 'Atividade geral',
+    11: 'Humor',
+    12: 'Habilidade de caminhar',
+    13: 'Trabalho',
+    14: 'Relacionamento com outras pessoas',
+    15: 'Sono',
+    16: 'Habilidade para apreciar a vida',
   };
 
   static Map<int, String> questionarioDorStartQuestoesValues = {
@@ -164,6 +183,8 @@ class QuestaoQuestionarioDomain {
         return questionarioDepressaoPHQ9QuestoesValues[questaoOrdem]!;
       case QuestionarioDomain.depressaoBeckDomainValue:
         return questionarioDepressaoBeckQuestoesValues[questaoOrdem]![0]!;
+      case QuestionarioDomain.dorInventarioDomainValue:
+        return questionarioDorInventarioQuestoesValues[questaoOrdem]!;
       case QuestionarioDomain.dorStartDomainValue:
         return questionarioDorStartQuestoesValues[questaoOrdem]!;
       case QuestionarioDomain.tabagismoFagerstromDomainValue:
