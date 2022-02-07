@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:vida_app/models/pesquisador_model.dart';
 import 'package:vida_app/screens/auth_wrapper/auth_wrapper_widget.dart';
 import 'package:vida_app/services/firebase_auth_service.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -38,6 +39,15 @@ class VidaApp extends StatelessWidget {
           // is not restarted.
           primarySwatch: Colors.purple,
         ),
+        localizationsDelegates: [
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        supportedLocales: [
+          Locale('pt', 'BR'), // Português, Brasil
+        ],
+        debugShowCheckedModeBanner: false,
         home: AuthWrapperWidget(),
       ),
     );

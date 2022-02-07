@@ -18,8 +18,6 @@ class ResultadoQuestionarioTabagismoFagerstromScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    questionario.questoes.forEach((key, value) => print(value));
-
     return Scaffold(
       appBar: AppBar(
         title: Text('Resultado do questionário - TESTE DE FAGERSTRÖM'),

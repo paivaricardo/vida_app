@@ -186,7 +186,6 @@ class CadastroPacienteScreenState extends State<CadastroPacienteScreen>
                         value: 'F',
                         groupValue: radioValueSexo,
                         onChanged: (String? value) {
-                          print(value);
 
                           setState(() {
                             radioValueSexo = value;
@@ -204,7 +203,6 @@ class CadastroPacienteScreenState extends State<CadastroPacienteScreen>
                         value: 'N',
                         groupValue: radioValueSexo,
                         onChanged: (String? value) {
-                          print(value);
 
                           setState(() {
                             radioValueSexo = value;
@@ -222,7 +220,6 @@ class CadastroPacienteScreenState extends State<CadastroPacienteScreen>
                         value: 'O',
                         groupValue: radioValueSexo,
                         onChanged: (String? value) {
-                          print(value);
 
                           setState(() {
                             radioValueSexo = value;

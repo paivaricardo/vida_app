@@ -160,8 +160,6 @@ class _QuestionarioTabagismoFagerstromScreenState
                             // Salvar o questionário e todos os seus registros no banco de dados Firestore Database
                             questionarioTabagismoFagerstrom.firestoreAdd();
 
-                            print(questionarioTabagismoFagerstrom.toString());
-
                             Navigator.pop(context);
                             Navigator.of(context).push(MaterialPageRoute(
                                 builder: (context) =>

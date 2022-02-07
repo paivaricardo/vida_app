@@ -96,7 +96,6 @@ class _RegistrarIntervencaoScreenState
                       setState(() {
                         _picValue = newValue!;
                         _idPic = Pic.getPicId(newValue);
-                        print(_idPic);
                       });
                     },
                     items: Pic.picsValues.values.toList()

@@ -102,12 +102,17 @@ class _HistoricoPacienteMainScreenState
                 List<dynamic> listElements = HistoricoListRetrieverHelper.retrieveHistoricoList(docSnapshotsMergedList);
 
                 // Here is where the main view is located.
-                return ListView.builder(
-                    padding: EdgeInsets.all(16.0),
-                    itemCount: listElements.length,
-                    itemBuilder: (context, index) {
-                      return listElements[index].buildSnippet(context);
-                    });
+                return Scrollbar(
+                  showTrackOnHover: true,
+                  thickness: 8.0,
+                  interactive: true,
+                  child: ListView.builder(
+                      padding: EdgeInsets.all(16.0),
+                      itemCount: listElements.length,
+                      itemBuilder: (context, index) {
+                        return listElements[index].buildSnippet(context);
+                      }),
+                );
               }
 
               return const Center(

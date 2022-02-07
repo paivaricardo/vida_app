@@ -149,8 +149,6 @@ class _QuestionarioDepressaoBeckScreenState
                             // Salvar o questionário e todos os seus registros no banco de dados Firestore Database
                             questionarioDepressaoBeck.firestoreAdd();
 
-                            print(questionarioDepressaoBeck.toString());
-
                             Navigator.pop(context);
                             Navigator.of(context).push(MaterialPageRoute(
                                 builder: (context) =>

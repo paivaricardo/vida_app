@@ -47,11 +47,14 @@ class ConsultarInstituicaoScreen extends StatelessWidget {
                         backgroundColor: MaterialStateProperty.all<Color>(Colors.grey),
                       ),
                     ),
-                    ElevatedButton.icon(onPressed: () {
-                      Navigator.pop(context);
-                    }, label: Text('Editar'),
-                    icon: Icon(Icons.edit),
-                    ),
+
+                    // TODO: implementar a funcionalidade de edição
+                    // ElevatedButton.icon(onPressed: () {
+                    //   Navigator.pop(context);
+                    // }, label: Text('Editar'),
+                    // icon: Icon(Icons.edit),
+                    // ),
+
                   ],
                 ),
               ),

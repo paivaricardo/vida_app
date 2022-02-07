@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:vida_app/models/pesquisador_model.dart';
 import 'package:vida_app/screens/conta_screens/alterar_senha_screen.dart';
+import 'package:vida_app/screens/pesquisadores/consultar_pesquisador_screen.dart';
 
 class AcoesContaScreen extends StatelessWidget {
   const AcoesContaScreen({Key? key}) : super(key: key);
@@ -32,9 +35,7 @@ class AcoesContaScreen extends StatelessWidget {
             ),
             title: Text('Visualizar perfil'),
             onTap: () {
-              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                content: Text('Funcionalidade a ser implementada futuramente.'),
-              ));
+              Navigator.push(context, MaterialPageRoute(builder: (context) => ConsultarPesquisadorScreen(pesquisador: Provider.of<Pesquisador?>(context)!)));
             },
           )),
         ],

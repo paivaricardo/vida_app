@@ -36,13 +36,15 @@ class _DashboardCoordenadorState extends State<DashboardCoordenador> {
       body: SingleChildScrollView(
         child: Container(
           width: canvasWidth,
-          child: Column(crossAxisAlignment: CrossAxisAlignment.center, children: <
-              Widget>[
+          child:
+              Column(crossAxisAlignment: CrossAxisAlignment.center, children: <
+                  Widget>[
             Padding(
               padding: const EdgeInsets.fromLTRB(0, 16.0, 0, 0.0),
               child: GradientText(
                 'VIDA',
-                gradient: LinearGradient(colors: [Colors.black, Colors.black54]),
+                gradient:
+                    LinearGradient(colors: [Colors.black, Colors.black54]),
                 style: TextStyle(fontSize: 96.0, fontFamily: 'Comfortaa'),
               ),
             ),
@@ -67,7 +69,8 @@ class _DashboardCoordenadorState extends State<DashboardCoordenador> {
                   runSpacing: 16,
                   children: <Widget>[
                     Material(
-                      textStyle: TextStyle(fontFamily: 'Comfortaa', fontSize: 14.0),
+                      textStyle:
+                          TextStyle(fontFamily: 'Comfortaa', fontSize: 14.0),
                       color: Colors.deepPurple,
                       borderRadius: BorderRadius.all(Radius.circular(24.0)),
                       elevation: 10.0,
@@ -98,9 +101,12 @@ class _DashboardCoordenadorState extends State<DashboardCoordenador> {
                       ),
                     ),
                     Visibility(
-                      visible: Provider.of<Pesquisador?>(context)!.idPerfilUtilizador == 1,
+                      visible: Provider.of<Pesquisador?>(context)!
+                              .idPerfilUtilizador ==
+                          1,
                       child: Material(
-                        textStyle: TextStyle(fontFamily: 'Comfortaa', fontSize: 14.0),
+                        textStyle:
+                            TextStyle(fontFamily: 'Comfortaa', fontSize: 14.0),
                         color: Colors.deepPurple,
                         borderRadius: BorderRadius.all(Radius.circular(24.0)),
                         elevation: 10.0,
@@ -132,7 +138,8 @@ class _DashboardCoordenadorState extends State<DashboardCoordenador> {
                       ),
                     ),
                     Material(
-                      textStyle: TextStyle(fontFamily: 'Comfortaa', fontSize: 14.0),
+                      textStyle:
+                          TextStyle(fontFamily: 'Comfortaa', fontSize: 14.0),
                       color: Colors.deepPurple,
                       borderRadius: BorderRadius.all(Radius.circular(24.0)),
                       elevation: 10.0,
@@ -163,7 +170,8 @@ class _DashboardCoordenadorState extends State<DashboardCoordenador> {
                       ),
                     ),
                     Material(
-                      textStyle: TextStyle(fontFamily: 'Comfortaa', fontSize: 14.0),
+                      textStyle:
+                          TextStyle(fontFamily: 'Comfortaa', fontSize: 14.0),
                       color: Colors.deepPurple,
                       borderRadius: BorderRadius.all(Radius.circular(24.0)),
                       elevation: 10.0,
@@ -194,15 +202,24 @@ class _DashboardCoordenadorState extends State<DashboardCoordenador> {
                       ),
                     ),
                     Material(
-                      textStyle: TextStyle(fontFamily: 'Comfortaa', fontSize: 14.0),
+                      textStyle:
+                          TextStyle(fontFamily: 'Comfortaa', fontSize: 14.0),
                       color: Colors.deepPurple,
                       borderRadius: BorderRadius.all(Radius.circular(24.0)),
                       elevation: 10.0,
                       shadowColor: Colors.deepPurple,
                       child: InkWell(
                         onTap: () {
-                          Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) => InstituicoesScreen()));
+                          showAboutDialog(
+                            context: context,
+                            applicationName: 'VIDA app',
+                            applicationVersion: 'v1.0.0',
+                            applicationIcon: Image.asset('assets/icons/android_icons/1x/Asset1mdpi.png'),
+                            applicationLegalese: 'Este aplicativo é de propriedade da Fundação Universidade Federal do Amapá (UNIFAP). Todos os direitos reservados.',
+                            children: <Widget>[
+                              Text('A aplicativo VIDA foi desenvolvido como parte integrante de um projeto de pesquisa conduzido na Universidade Federal do Amapá (UNIFAP), no curso de Farmácia, referente às Práticas Integrativas e Complementares em Saúde (PICS) e acompanhamento de pacientes acometidos de ansiedade, depressão, dores e cessação tabágica, por meio da aplicação de questionários validados.'),
+                            ]
+                          );
                         },
                         child: SizedBox(
                           width: 115,
@@ -225,7 +242,8 @@ class _DashboardCoordenadorState extends State<DashboardCoordenador> {
                       ),
                     ),
                     Material(
-                      textStyle: TextStyle(fontFamily: 'Comfortaa', fontSize: 14.0),
+                      textStyle:
+                          TextStyle(fontFamily: 'Comfortaa', fontSize: 14.0),
                       color: Colors.deepPurple,
                       borderRadius: BorderRadius.all(Radius.circular(24.0)),
                       elevation: 10.0,

@@ -172,8 +172,6 @@ class _QuestionarioDepressaoPHQ9ScreenState
                             // Salvar o questionário e todos os seus registros no banco de dados Firestore Database
                             questionarioDepressaoPHQ9.firestoreAdd();
 
-                            print(questionarioDepressaoPHQ9.toString());
-
                             Navigator.pop(context);
                             Navigator.of(context).push(MaterialPageRoute(
                                 builder: (context) =>

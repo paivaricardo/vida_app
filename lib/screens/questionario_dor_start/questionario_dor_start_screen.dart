@@ -181,8 +181,6 @@ class _QuestionarioDorStartScreenState
                             // Salvar o questionário e todos os seus registros no banco de dados Firestore Database
                             questionarioDorStart.firestoreAdd();
 
-                            print(questionarioDorStart.toString());
-
                             Navigator.pop(context);
                             Navigator.of(context).push(MaterialPageRoute(
                                 builder: (context) =>

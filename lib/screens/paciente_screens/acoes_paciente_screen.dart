@@ -89,17 +89,6 @@ class AcoesPacienteScreen extends StatelessWidget {
                 },
               ),
             ),
-            Card(
-              child: ListTile(
-                leading: Icon(Icons.list_alt_rounded),
-                title: Text('Visualizar histórico'),
-                onTap: () {
-                  Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) =>
-                          HistoricoPacienteMainScreen(paciente: paciente)));
-                },
-              ),
-            ),
             Visibility(
               visible: currentLoggedInPesquisador.idPerfilUtilizador == 1,
               child: Card(
