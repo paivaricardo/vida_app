@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:vida_app/models/pesquisador_model.dart';
 
 class Paciente {
   static final String tableName = 'paciente';
@@ -63,6 +64,7 @@ class Paciente {
   bool icActive;
   bool icAcceptedDataTreatment;
   List<String?>? uuidPesquisadoresAutorizados;
+  Pesquisador? pesquisadorCadastrante;
 
   Paciente({
     this.uuid,
@@ -90,6 +92,7 @@ class Paciente {
     this.icActive = true,
     this.icAcceptedDataTreatment = true,
     this.uuidPesquisadoresAutorizados,
+    this.pesquisadorCadastrante,
   });
 
   Paciente.fromJson(Map<String, dynamic> json)
@@ -120,6 +123,8 @@ class Paciente {
           icAcceptedDataTreatment: json['icAcceptedDataTreatment'],
           uuidPesquisadoresAutorizados:
               List<String>.from(json['uuidPesquisadoresAutorizados']),
+          pesquisadorCadastrante:
+              Pesquisador.fromJson(json['pesquisadorCadastrante']),
         );
 
   Map<String, dynamic> toJson() {
@@ -149,6 +154,7 @@ class Paciente {
       'icActive': icActive,
       'icAcceptedDataTreatment': icAcceptedDataTreatment,
       'uuidPesquisadoresAutorizados': uuidPesquisadoresAutorizados,
+      'pesquisadorCadastrante': pesquisadorCadastrante!.toJson(),
     };
   }
 

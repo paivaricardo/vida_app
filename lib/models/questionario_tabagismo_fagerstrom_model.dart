@@ -145,43 +145,48 @@ class QuestionarioTabagismoFagerstrom extends Questionario {
                   padding: const EdgeInsets.all(8.0),
                   child: Icon(Icons.list_alt_rounded),
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Questionário',
-                        style: TextStyle(
-                          fontSize: 20.0,
-                          fontWeight: FontWeight.bold,
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Questionário',
+                          style: TextStyle(
+                            fontSize: 20.0,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                      ),
-                      Text(
-                        QuestionarioDomain.retriveNomeQuestionario(
-                            idQuestionarioDomain)[0],
-                        style: TextStyle(
-                          fontSize: 16.0,
-                          fontStyle: FontStyle.italic,
+                        Text(
+                          QuestionarioDomain.retriveNomeQuestionario(
+                              idQuestionarioDomain)[0],
+                          style: TextStyle(
+                            fontSize: 16.0,
+                            fontStyle: FontStyle.italic,
+                          ),
+                          overflow: TextOverflow.ellipsis,
                         ),
-                      ),
-                      Text(
-                        QuestionarioDomain.retriveNomeQuestionario(
-                            idQuestionarioDomain)[1],
-                        style: TextStyle(color: Colors.grey),
-                      ),
-                      Visibility(
-                          visible: QuestionarioDomain
-                              .visibleScores[idQuestionarioDomain]!,
-                          child: Text(
-                            'Score: ${pontuacaoQuestionario} (${interpretacaoPontuacaoQuestionario})',
-                            style: TextStyle(
-                                fontSize: 16.0, color: Colors.deepOrange),
-                          )),
-                      Text(
-                          'Data: ${DateTimeHelper.retrieveFormattedDateStringBR(dataRealizacao)}'),
-                      Text('Id.: $uuidQuestionarioAplicado'),
-                    ],
+                        Text(
+                          QuestionarioDomain.retriveNomeQuestionario(
+                              idQuestionarioDomain)[1],
+                          style: TextStyle(color: Colors.grey),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        Visibility(
+                            visible: QuestionarioDomain
+                                .visibleScores[idQuestionarioDomain]!,
+                            child: Text(
+                              'Score: ${pontuacaoQuestionario} (${interpretacaoPontuacaoQuestionario})',
+                              style: TextStyle(
+                                  fontSize: 16.0, color: Colors.deepOrange),
+                              overflow: TextOverflow.ellipsis,
+                            )),
+                        Text(
+                            'Data: ${DateTimeHelper.retrieveFormattedDateStringBR(dataRealizacao)}',                      overflow: TextOverflow.ellipsis),
+                        Text('Id.: $uuidQuestionarioAplicado', overflow: TextOverflow.ellipsis,),
+                      ],
+                    ),
                   ),
                 )
               ],

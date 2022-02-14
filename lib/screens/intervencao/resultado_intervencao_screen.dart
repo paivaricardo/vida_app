@@ -32,43 +32,43 @@ class ResultadoIntervencaoScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               const Padding(
-                padding: const EdgeInsets.only(top: 8.0),
+                padding: EdgeInsets.only(top: 8.0),
                 child: TitleText('Data da realização'),
               ),
               Text(DateTimeHelper.retrieveFormattedDateStringBR(
                   intervencao.dataRealizacao)),
               const Padding(
-                padding: const EdgeInsets.only(top: 16.0),
+                padding: EdgeInsets.only(top: 16.0),
                 child: TitleText('Identificador'),
               ),
               Text(intervencao.uuidIntervencao),
               const Padding(
-                padding: const EdgeInsets.only(top: 16.0),
+                padding: EdgeInsets.only(top: 16.0),
                 child: TitleText('Pesquisador responsável'),
               ),
               Text(intervencao.pesquisador.nomePesquisador),
               const Padding(
-                padding: const EdgeInsets.only(top: 16.0),
+                padding: EdgeInsets.only(top: 16.0),
                 child: TitleText('Paciente'),
               ),
               Text(intervencao.paciente.nome),
               const Padding(
-                padding: const EdgeInsets.only(top: 16.0),
+                padding: EdgeInsets.only(top: 16.0),
                 child: TitleText('PICS aplicada'),
               ),
               Text(Pic.getPicValue(intervencao.idPic)),
               const Padding(
-                padding: const EdgeInsets.only(top: 16.0),
+                padding: EdgeInsets.only(top: 16.0),
                 child: TitleText('Duração'),
               ),
               Text(intervencao.duration.toString()),
               const Padding(
-                padding: const EdgeInsets.only(top: 16.0),
+                padding: EdgeInsets.only(top: 16.0),
                 child: TitleText('Nome do aplicador da intervenção'),
               ),
               Text(intervencao.nomeAplicadorIntervencao),
               const Padding(
-                padding: const EdgeInsets.only(top: 16.0),
+                padding: EdgeInsets.only(top: 16.0),
                 child: TitleText('Observações'),
               ),
               Text(intervencao.obsIntervencao),

@@ -19,37 +19,37 @@ class ConsultarPesquisadorScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               const Padding(
-                padding: const EdgeInsets.only(top: 16.0),
+                padding: EdgeInsets.only(top: 16.0),
                 child: TitleText('Nome do pesquisador'),
               ),
               Text(pesquisador.nomePesquisador),
               const Padding(
-                padding: const EdgeInsets.only(top: 32.0),
+                padding: EdgeInsets.only(top: 32.0),
                 child: TitleText('Identificador do pesquisador'),
               ),
               Text(pesquisador.uuidPesquisador),
               const Padding(
-                padding: const EdgeInsets.only(top: 32.0),
+                padding: EdgeInsets.only(top: 32.0),
                 child: TitleText('Instituição'),
               ),
               Text(pesquisador.instituicao.nomeInstituicao),
               const Padding(
-                padding: const EdgeInsets.only(top: 32.0),
+                padding: EdgeInsets.only(top: 32.0),
                 child: TitleText('CPF'),
               ),
               Text(pesquisador.cpfPesquisador),
               const Padding(
-                padding: const EdgeInsets.only(top: 32.0),
+                padding: EdgeInsets.only(top: 32.0),
                 child: TitleText('Cargo'),
               ),
               Text(pesquisador.cargoPesquisador),
               const Padding(
-                padding: const EdgeInsets.only(top: 32.0),
+                padding: EdgeInsets.only(top: 32.0),
                 child: TitleText('E-mail'),
               ),
               Text(pesquisador.emailPesquisador),
               const Padding(
-                padding: const EdgeInsets.only(top: 32.0),
+                padding: EdgeInsets.only(top: 32.0),
                 child: TitleText('Tipo de perfil'),
               ),
               Text(PerfilUtilizador.getPerfilUtilizadorValue(pesquisador.idPerfilUtilizador)),

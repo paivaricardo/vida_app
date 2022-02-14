@@ -38,6 +38,8 @@ class _QuestionarioAnsiedadeScreenState
       TextEditingController();
   TextEditingController tratamentosPreviosAnsiedadeController =
       TextEditingController();
+  TextEditingController observacoesQuestionarioAnsiedadeController =
+  TextEditingController();
 
   // Questionário de ansiedade - objeto onde os dados serão salvos
   late QuestionarioAnsiedade questionarioAnsiedadeAplicado =
@@ -93,63 +95,66 @@ class _QuestionarioAnsiedadeScreenState
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text('Possui diagnóstico de ansiedade?'),
-                      Row(
-                        children: [
-                          SizedBox(
-                            width: 120,
-                            child: ListTile(
-                              contentPadding: EdgeInsets.all(-2),
-                              title: Text('Não'),
-                              leading: Radio(
-                                value: 'N',
-                                groupValue:
-                                    radioValuePossuiDiagnosticoAnsiedade,
-                                onChanged: (String? value) {
-                                  setState(() {
-                                    radioValuePossuiDiagnosticoAnsiedade =
-                                        value;
-                                  });
-                                },
+                      SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Row(
+                          children: [
+                            SizedBox(
+                              width: 120,
+                              child: ListTile(
+                                contentPadding: EdgeInsets.all(-2),
+                                title: Text('Não'),
+                                leading: Radio(
+                                  value: 'N',
+                                  groupValue:
+                                      radioValuePossuiDiagnosticoAnsiedade,
+                                  onChanged: (String? value) {
+                                    setState(() {
+                                      radioValuePossuiDiagnosticoAnsiedade =
+                                          value;
+                                    });
+                                  },
+                                ),
                               ),
                             ),
-                          ),
-                          SizedBox(
-                            width: 150,
-                            child: ListTile(
-                              contentPadding: EdgeInsets.all(-2),
-                              title: Text('Não sabe'),
-                              leading: Radio(
-                                value: 'NS',
-                                groupValue:
-                                    radioValuePossuiDiagnosticoAnsiedade,
-                                onChanged: (String? value) {
-                                  setState(() {
-                                    radioValuePossuiDiagnosticoAnsiedade =
-                                        value;
-                                  });
-                                },
+                            SizedBox(
+                              width: 150,
+                              child: ListTile(
+                                contentPadding: EdgeInsets.all(-2),
+                                title: Text('Não sabe'),
+                                leading: Radio(
+                                  value: 'NS',
+                                  groupValue:
+                                      radioValuePossuiDiagnosticoAnsiedade,
+                                  onChanged: (String? value) {
+                                    setState(() {
+                                      radioValuePossuiDiagnosticoAnsiedade =
+                                          value;
+                                    });
+                                  },
+                                ),
                               ),
                             ),
-                          ),
-                          SizedBox(
-                            width: 120,
-                            child: ListTile(
-                              contentPadding: EdgeInsets.all(-2),
-                              title: Text('Sim'),
-                              leading: Radio(
-                                value: 'S',
-                                groupValue:
-                                    radioValuePossuiDiagnosticoAnsiedade,
-                                onChanged: (String? value) {
-                                  setState(() {
-                                    radioValuePossuiDiagnosticoAnsiedade =
-                                        value;
-                                  });
-                                },
+                            SizedBox(
+                              width: 120,
+                              child: ListTile(
+                                contentPadding: EdgeInsets.all(-2),
+                                title: Text('Sim'),
+                                leading: Radio(
+                                  value: 'S',
+                                  groupValue:
+                                      radioValuePossuiDiagnosticoAnsiedade,
+                                  onChanged: (String? value) {
+                                    setState(() {
+                                      radioValuePossuiDiagnosticoAnsiedade =
+                                          value;
+                                    });
+                                  },
+                                ),
                               ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                       Visibility(
                         visible: radioValuePossuiDiagnosticoAnsiedade == 'S',
@@ -223,6 +228,12 @@ class _QuestionarioAnsiedadeScreenState
                             labelText: 'Tratamentos prévios para ansiedade'),
                         controller: tratamentosPreviosAnsiedadeController,
                       ),
+                      TextFormField(
+                        decoration: InputDecoration(
+                            labelText: 'Observações'),
+                        maxLength: 400,
+                        controller: observacoesQuestionarioAnsiedadeController,
+                      ),
                     ],
                   ),
                 ),
@@ -277,6 +288,9 @@ class _QuestionarioAnsiedadeScreenState
 
                             questionarioAnsiedadeAplicado.dataRealizacao =
                                 DateTime.now();
+
+                            // Registro das observações:
+                            questionarioAnsiedadeAplicado.observacoes = observacoesQuestionarioAnsiedadeController.text;
 
                             questionarioAnsiedadeAplicado
                                     .pontuacaoQuestionario =

@@ -7,6 +7,7 @@ import 'package:uuid/uuid.dart';
 import 'package:vida_app/components/dialog_assinatura_termo_tratamento_dados.dart';
 import 'package:vida_app/helpers/datetime_helper.dart';
 import 'package:vida_app/models/escolaridade_model.dart';
+import 'package:vida_app/models/log_model.dart';
 import 'package:vida_app/models/paciente_model.dart';
 import 'package:vida_app/models/paciente_signature_model.dart';
 import 'package:vida_app/models/pesquisador_model.dart';
@@ -186,7 +187,6 @@ class CadastroPacienteScreenState extends State<CadastroPacienteScreen>
                         value: 'F',
                         groupValue: radioValueSexo,
                         onChanged: (String? value) {
-
                           setState(() {
                             radioValueSexo = value;
                           });
@@ -203,7 +203,6 @@ class CadastroPacienteScreenState extends State<CadastroPacienteScreen>
                         value: 'N',
                         groupValue: radioValueSexo,
                         onChanged: (String? value) {
-
                           setState(() {
                             radioValueSexo = value;
                           });
@@ -220,7 +219,6 @@ class CadastroPacienteScreenState extends State<CadastroPacienteScreen>
                         value: 'O',
                         groupValue: radioValueSexo,
                         onChanged: (String? value) {
-
                           setState(() {
                             radioValueSexo = value;
                           });
@@ -474,8 +472,10 @@ class CadastroPacienteScreenState extends State<CadastroPacienteScreen>
                 },
               ),
               TextFormField(
-                decoration: InputDecoration(
-                    labelText: 'Desde que data fuma (aproximadamente)?'),
+                decoration: const InputDecoration(
+                    labelText: 'Desde que data fuma (aproximadamente)?',
+                    hintText: 'ex.: 10/09/2021 - digite apenas números',
+                ),
                 maxLength: 10,
                 controller: _controllerDataInicioFumo,
                 keyboardType: TextInputType.number,
@@ -565,15 +565,68 @@ class CadastroPacienteScreenState extends State<CadastroPacienteScreen>
                       try {
                         // Mostrar caixa de diálogo de aprovação de tratamento de dados
 
+                        Paciente pacienteCreated = Paciente(
+                          uuid: generatedUuid,
+                          nome: _controllerNome.text.toUpperCase(),
+                          dataNascimento: DateTime(
+                            int.parse(_controllerAnoNascimento.text),
+                            int.parse(_controllerMesNascimento.text),
+                            int.parse(_controllerDiaNascimento.text),
+                          ),
+                          sexo: radioValueSexo!,
+                          escolaridade: escolaridade!,
+                          profissao: _controllerProfissao.text,
+                          pesoAtual: double.parse(_controllerPesoAtual.text),
+                          altura: double.parse(_controllerAltura.text),
+                          conhecePic: conhecePic,
+                          quaisPicConhece: {
+                            'Reflexologia podal': conheceReflexologiaPodal,
+                            'Aromaterapia': conheceAromaterapia,
+                            'Auriculoterapia': conheceAuriculoTerapia,
+                            'Cromoterapia': conheceCromoterapia,
+                          },
+                          apresentaAnsiedade: apresentaAnsiedade,
+                          apresentaDepressao: apresentaDepressao,
+                          apresentaDor: apresentaDores,
+                          localDor: _controllerLocalDor.text.isEmpty
+                              ? 'Sem dor'
+                              : _controllerLocalDor.text,
+                          fumante: fumante,
+                          frequenciaFumo:
+                          fumante ? frequenciaFumo! : 'Não fumante',
+                          cigarrosDia: int.parse(
+                              _controllerCigarrosDia.text.isEmpty || !fumante
+                                  ? '0'
+                                  : _controllerCigarrosDia.text),
+                          dataInicioFumo:
+                          _controllerDataInicioFumo.text.isEmpty
+                              ? null
+                              : DateTimeHelper.dateParse(
+                              _controllerDataInicioFumo.text),
+                          dataRegistroPaciente: DateTime.now(),
+                          fazUsoMedicamento: fazUsoMedicamento,
+                          medicamentos: _controllerMedicamento.text.isEmpty
+                              ? fazUsoMedicamento
+                              ? 'Não informado'
+                              : 'Nenhum'
+                              : _controllerMedicamento.text,
+                          observacoes: _controllerObservacoes.text.isEmpty
+                              ? 'SEM OBSERVAÇÕES'
+                              : _controllerObservacoes.text.toUpperCase(),
+                          uuidPesquisadoresAutorizados: [
+                            pesquisadorCadastrante.uuidPesquisador
+                          ],
+                          pesquisadorCadastrante: pesquisadorCadastrante,
+                        );
+
                         pacienteSignature = await showDialog(
                             context: context,
                             builder: (context) {
                               return StatefulBuilder(
                                   builder: (context, setState) {
                                 return DialogAssinaturaTermoTratamentoDados(
-                                  pacienteUuid: generatedUuid,
-                                  pacienteNome:
-                                      _controllerNome.text.toUpperCase(),
+                                  paciente:
+                                      pacienteCreated
                                 );
                               });
                             });
@@ -585,61 +638,26 @@ class CadastroPacienteScreenState extends State<CadastroPacienteScreen>
                         }
 
                         if (aceitaTratamento) {
-                          Paciente pacienteCreated = Paciente(
-                            uuid: generatedUuid,
-                            nome: _controllerNome.text.toUpperCase(),
-                            dataNascimento: DateTime(
-                              int.parse(_controllerAnoNascimento.text),
-                              int.parse(_controllerMesNascimento.text),
-                              int.parse(_controllerDiaNascimento.text),
-                            ),
-                            sexo: radioValueSexo!,
-                            escolaridade: escolaridade!,
-                            profissao: _controllerProfissao.text,
-                            pesoAtual: double.parse(_controllerPesoAtual.text),
-                            altura: double.parse(_controllerAltura.text),
-                            conhecePic: conhecePic,
-                            quaisPicConhece: {
-                              'Reflexologia podal': conheceReflexologiaPodal,
-                              'Aromaterapia': conheceAromaterapia,
-                              'Auriculoterapia': conheceAuriculoTerapia,
-                              'Cromoterapia': conheceCromoterapia,
-                            },
-                            apresentaAnsiedade: apresentaAnsiedade,
-                            apresentaDepressao: apresentaDepressao,
-                            apresentaDor: apresentaDores,
-                            localDor: _controllerLocalDor.text.isEmpty
-                                ? 'Sem dor'
-                                : _controllerLocalDor.text,
-                            fumante: fumante,
-                            frequenciaFumo:
-                                fumante ? frequenciaFumo! : 'Não fumante',
-                            cigarrosDia: int.parse(
-                                _controllerCigarrosDia.text.isEmpty || !fumante
-                                    ? '0'
-                                    : _controllerCigarrosDia.text),
-                            dataInicioFumo:
-                                _controllerDataInicioFumo.text.isEmpty
-                                    ? null
-                                    : DateTimeHelper.dateParse(
-                                        _controllerDataInicioFumo.text),
-                            dataRegistroPaciente: DateTime.now(),
-                            fazUsoMedicamento: fazUsoMedicamento,
-                            medicamentos: _controllerMedicamento.text.isEmpty
-                                ? fazUsoMedicamento
-                                    ? 'Não informado'
-                                    : 'Nenhum'
-                                : _controllerMedicamento.text,
-                            observacoes: _controllerObservacoes.text.isEmpty
-                                ? 'SEM OBSERVAÇÕES'
-                                : _controllerObservacoes.text.toUpperCase(),
-                            uuidPesquisadoresAutorizados: [
-                              pesquisadorCadastrante.uuidPesquisador
-                            ],
+
+                          pacienteSignature!.firestoreAdd();
+                          pacienteCreated.firestoreAdd();
+
+                          // Firebase Logs info
+                          LogModel logPacienteCreated = LogModel(
+                            dateTimeLog : DateTime.now(),
+                              eventType : 'CREATE',
+                            comments: 'Paciente ${pacienteCreated.nome} - uuid ${pacienteCreated.uuid} - cadastrado por ${pesquisadorCadastrante.nomePesquisador} - ${pesquisadorCadastrante.uuidPesquisador}',
+                            additionalInfo: { 'pacienteCreated' : pacienteCreated.toJson() }
+                          );
+                          // Firebase Logs info
+                          LogModel logPacientConsent = LogModel(
+                            dateTimeLog : DateTime.now(),
+                              eventType : 'CONSENT_DATA',
+                            comments: 'Paciente ${pacienteCreated.nome} - uuid ${pacienteCreated.uuid} - consentiu com tratamento de dados.',
                           );
 
-                          pacienteCreated.firestoreAdd();
-                          pacienteSignature!.firestoreAdd();
+                          logPacienteCreated.firestoreAdd();
+                          logPacientConsent.firestoreAdd();
 
                           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                               content:

@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:provider/provider.dart';
 import 'package:vida_app/components/gradient_text.dart';
 import 'package:vida_app/helpers/password_helper.dart';
@@ -357,6 +358,7 @@ class _FirstAccessScreenState extends State<FirstAccessScreen> {
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: Text('Senha alterada com sucesso!'),
           ));
+          Phoenix.rebirth(context);
         }
       } else {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(

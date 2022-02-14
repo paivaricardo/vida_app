@@ -64,7 +64,7 @@ class _ListaPacientesScreenState extends State<ListaPacientesScreen> {
                   List<DocumentSnapshot> pacientesDocSnapshots =
                       snapshot.data!.docs;
 
-                  if (pacientesDocSnapshots.isEmpty) {
+                  if (pacientesDocSnapshots.isEmpty || pacientesDocSnapshots.contains(null)) {
                     return Center(
                       child: Text('Não há pacientes cadastrados ainda!'),
                     );

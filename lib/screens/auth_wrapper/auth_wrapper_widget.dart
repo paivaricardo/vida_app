@@ -6,6 +6,7 @@ import 'package:vida_app/screens/dashboard/dashboard_coordenador.dart';
 import 'package:vida_app/screens/login_screens/email_confirm_screen.dart';
 import 'package:vida_app/screens/login_screens/first_access_screen.dart';
 import 'package:vida_app/screens/login_screens/login_screen.dart';
+import 'package:vida_app/screens/termo_responsabilidade_screens/termo_responsabilidade_screen.dart';
 import 'package:vida_app/services/firebase_auth_service.dart';
 
 class AuthWrapperWidget extends StatelessWidget {
@@ -19,7 +20,7 @@ class AuthWrapperWidget extends StatelessWidget {
     if (pesquisador == null) {
       return LoginScreen();
     } else {
-      Pesquisador.loggedInPesquisador = pesquisador;
+      // Pesquisador.loggedInPesquisador = pesquisador;
       User firebaseUser = FirebaseAuthService().currentUser!;
 
       if (pesquisador.icAuthorized && pesquisador.icActive) {
@@ -27,11 +28,17 @@ class AuthWrapperWidget extends StatelessWidget {
           if (pesquisador.firstAccess) {
             return FirstAccessScreen();
           } else {
-            switch (pesquisador.idPerfilUtilizador) {
-              case 1:
-                return DashboardCoordenador(pesquisador);
-              default:
-                return DashboardCoordenador(pesquisador);
+            if (pesquisador.acceptedTermoResponsabilidade) {
+              switch (pesquisador.idPerfilUtilizador) {
+                case 1:
+                  return DashboardCoordenador(pesquisador);
+                default:
+                  return DashboardCoordenador(pesquisador);
+              }
+            } else {
+              return TermoResponsabilidadeScreen(
+                pesquisador: pesquisador,
+              );
             }
           }
         } else {

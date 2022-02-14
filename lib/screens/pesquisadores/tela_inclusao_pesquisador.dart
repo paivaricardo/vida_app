@@ -14,7 +14,7 @@ class TelaInclusaoPesquisador extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Inclusão de pesquisador')),
+      appBar: AppBar(title: Text('Inclusão de pesquisador'), automaticallyImplyLeading: false,),
       body: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.all(16.0),

@@ -1,10 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:vida_app/models/instituicao_model.dart';
 
 class Pesquisador {
-  static Pesquisador? loggedInPesquisador;
+  // static Pesquisador? loggedInPesquisador;
 
   static const String tableName = 'pesquisador';
 
@@ -39,6 +38,7 @@ class Pesquisador {
   bool icActive;
   bool icAuthorized;
   bool firstAccess;
+  bool acceptedTermoResponsabilidade;
 
   // Optional relational parameters
 
@@ -53,6 +53,7 @@ class Pesquisador {
       this.icActive = true,
       this.icAuthorized = true,
       this.firstAccess = true,
+      this.acceptedTermoResponsabilidade = false,
       });
 
   Pesquisador.fromJson(Map<String, dynamic> json)
@@ -67,6 +68,7 @@ class Pesquisador {
           icActive: json['icActive'],
           icAuthorized: json['icAuthorized'],
           firstAccess: json['firstAccess'],
+          acceptedTermoResponsabilidade: json['acceptedTermoResponsabilidade'],
         );
 
   static Future<Pesquisador?> getPesquisadorfromFirebaseAuthUser(
@@ -98,6 +100,7 @@ class Pesquisador {
       'icActive': icActive,
       'icAuthorized': icAuthorized,
       'firstAccess': firstAccess,
+      'acceptedTermoResponsabilidade' : acceptedTermoResponsabilidade,
     };
   }
 
@@ -118,6 +121,17 @@ class Pesquisador {
   @override
   String toString() {
     return 'Pesquisador{uuidPesquisador: $uuidPesquisador, nomePesquisador: $nomePesquisador, instituicao: $instituicao, cpfPesquisador: $cpfPesquisador, cargoPesquisador: $cargoPesquisador, emailPesquisador: $emailPesquisador, idPerfilUtilizador: $idPerfilUtilizador, icActive: $icActive, icAuthorized: $icAuthorized, firstAccess: $firstAccess}';
+  }
+
+  Future<void> acceptTermoResponsabilidade() {
+    acceptedTermoResponsabilidade = true;
+
+    CollectionReference pesquisadores =
+    FirebaseFirestore.instance.collection(firestoreCollectionName);
+
+    return pesquisadores.doc(uuidPesquisador).update(
+      { 'acceptedTermoResponsabilidade' : true }
+    );
   }
 
 // Não mais usado - objeto instituição está dentro do documento do pesquisador

@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:provider/provider.dart';
 import 'package:vida_app/models/pesquisador_model.dart';
 import 'package:vida_app/screens/auth_wrapper/auth_wrapper_widget.dart';
 import 'package:vida_app/services/firebase_auth_service.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -12,8 +14,9 @@ Future<void> main() async {
   // Initialize Firebase
   await Firebase.initializeApp();
 
-  runApp(const VidaApp());
+  FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
 
+  runApp(Phoenix(child: const VidaApp()));
 }
 
 class VidaApp extends StatelessWidget {

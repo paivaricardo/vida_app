@@ -32,6 +32,9 @@ class _DashboardCoordenadorState extends State<DashboardCoordenador> {
           'VIDA',
           style: TextStyle(fontFamily: 'Comfortaa', fontSize: 24.0),
         ),
+        actions: <Widget>[
+          IconButton(onPressed: _showHelpDialog, icon: const Icon(Icons.help_rounded)),
+        ],
       ),
       body: SingleChildScrollView(
         child: Container(
@@ -55,7 +58,7 @@ class _DashboardCoordenadorState extends State<DashboardCoordenador> {
             Padding(
               padding: const EdgeInsets.only(top: 16.0),
               child: Text(
-                'Bem-vindo, ${Pesquisador.loggedInPesquisador!.nomePesquisador}!',
+                'Bem-vindo, ${widget.pesquisadorCoordenador.nomePesquisador}!',
                 style: TextStyle(fontFamily: 'Comfortaa', fontSize: 16.0),
               ),
             ),
@@ -218,6 +221,11 @@ class _DashboardCoordenadorState extends State<DashboardCoordenador> {
                             applicationLegalese: 'Este aplicativo é de propriedade da Fundação Universidade Federal do Amapá (UNIFAP). Todos os direitos reservados.',
                             children: <Widget>[
                               Text('A aplicativo VIDA foi desenvolvido como parte integrante de um projeto de pesquisa conduzido na Universidade Federal do Amapá (UNIFAP), no curso de Farmácia, referente às Práticas Integrativas e Complementares em Saúde (PICS) e acompanhamento de pacientes acometidos de ansiedade, depressão, dores e cessação tabágica, por meio da aplicação de questionários validados.'),
+                              Padding(
+                                padding: const EdgeInsets.only(top: 12.0),
+                                child: Text('Para entrar em contato, enviar sugestões ou reportar erros, envie um e-mail para:', style: TextStyle(fontWeight: FontWeight.bold),),
+                              ),
+                              SelectableText('contato.vida.app@gmail.com')
                             ]
                           );
                         },
@@ -250,7 +258,6 @@ class _DashboardCoordenadorState extends State<DashboardCoordenador> {
                       shadowColor: Colors.deepPurple,
                       child: InkWell(
                         onTap: () async {
-                          Pesquisador.loggedInPesquisador = null;
 
                           await _firebaseAuthService.firebaseSignOut();
                         },
@@ -282,5 +289,33 @@ class _DashboardCoordenadorState extends State<DashboardCoordenador> {
         ),
       ),
     );
+  }
+
+  void _showHelpDialog() {
+    showDialog(context: context, builder: (context) {
+      return Dialog(
+        child: Container(
+          padding: EdgeInsets.all(32.0),
+          child: IntrinsicHeight(
+            child: SingleChildScrollView(
+              child: Column(
+                children: <Widget>[
+                  Icon(Icons.help, size: 64.0, color: Colors.deepPurple,),
+                  Padding(
+                    padding: EdgeInsets.only(bottom: 16.0),
+                    child: Text('Bem-vindo ao aplicativo VIDA!'),
+                  ),
+                  Text('Este é o menu principal da aplicação. Aqui, você poderá acessar as listas de pacientes cadastrados no aplicativo, onde poderá aplicar questionários, registrar intervenções, visualizar histórico ou exportar PDFs. A seção se pacientes é onde se concentra as principais funcionalidades da aplicação. Fora isso, neste menu principal poderá ter acesso aos pesquisadores cadastrados (funcionalidade disponível apenas para coordenadores, que poderão cadastrar novos pesquisadores por meio desse menu) e instituições. Também poderá administrar sua conta em "Conta", com possibilidade de alterar a sua senha ou visualizar os dados do seu perfil de pesquisador, previamente cadastrado. A parte "Sobre" fornece informações legais sobre o aplicativo, assim como dados sobre todas as licenças utilizadas.'),
+                  Text('Caso precise entrar em contato, faça uso do e-mail disponível na seção "Sobre"'),
+                  ElevatedButton.icon(onPressed: () {
+                    Navigator.pop(context);
+                  }, label: Text('Fechar'), icon: Icon(Icons.close),)
+                ],
+              ),
+            ),
+          ),
+        ),
+      );
+    });
   }
 }

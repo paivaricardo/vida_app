@@ -96,34 +96,36 @@ class Intervencao {
                   padding: const EdgeInsets.all(8.0),
                   child: Icon(Icons.favorite_rounded),
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Intervenção',
-                        style: TextStyle(
-                          fontSize: 20.0,
-                          fontWeight: FontWeight.bold,
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Intervenção',
+                          style: TextStyle(
+                            fontSize: 20.0,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                      ),
-                      Text(
-                        Pic.getPicValue(
-                            idPic),
-                        style: TextStyle(
-                          fontSize: 16.0,
-                          fontStyle: FontStyle.italic,
+                        Text(
+                          Pic.getPicValue(
+                              idPic),
+                          style: TextStyle(
+                            fontSize: 16.0,
+                            fontStyle: FontStyle.italic,
+                          ),
                         ),
-                      ),
-                      Text(
-                        'Duração: $duration min',
-                        style: TextStyle(color: Colors.grey),
-                      ),
-                      Text(
-                          'Data: ${DateTimeHelper.retrieveFormattedDateStringBR(dataRealizacao)}'),
-                      Text('Id.: $uuidIntervencao'),
-                    ],
+                        Text(
+                          'Duração: $duration min',
+                          style: TextStyle(color: Colors.grey),
+                        ),
+                        Text(
+                            'Data: ${DateTimeHelper.retrieveFormattedDateStringBR(dataRealizacao)}'),
+                        Text('Id.: $uuidIntervencao', overflow: TextOverflow.ellipsis,),
+                      ],
+                    ),
                   ),
                 )
               ],

@@ -192,6 +192,5 @@ class QuestaoQuestionarioDomain {
       default:
         return 'Questionário informado inválido';
     }
-    ;
   }
 }

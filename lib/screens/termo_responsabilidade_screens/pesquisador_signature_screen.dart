@@ -2,19 +2,19 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:signature/signature.dart';
-import 'package:vida_app/models/paciente_model.dart';
-import 'package:vida_app/models/paciente_signature_model.dart';
+import 'package:vida_app/models/pesquisador_model.dart';
+import 'package:vida_app/models/pesquisador_signature_model.dart';
 
-class SignatureScreen extends StatefulWidget {
-  final Paciente paciente;
+class PesquisadorSignatureScreen extends StatefulWidget {
+  final Pesquisador pesquisador;
 
-  const SignatureScreen({required this.paciente, Key? key}) : super(key: key);
+  const PesquisadorSignatureScreen({required this.pesquisador, Key? key}) : super(key: key);
 
   @override
-  _SignatureScreenState createState() => _SignatureScreenState();
+  _PesquisadorSignatureScreenState createState() => _PesquisadorSignatureScreenState();
 }
 
-class _SignatureScreenState extends State<SignatureScreen> {
+class _PesquisadorSignatureScreenState extends State<PesquisadorSignatureScreen> {
   late SignatureController _signatureController;
 
   @override
@@ -62,13 +62,13 @@ class _SignatureScreenState extends State<SignatureScreen> {
       if(_signatureController.isNotEmpty) {
         final signature = await exportSignature();
 
-        final signaturePaciente = PacienteSignatureModel(
+        final signaturePesquisador = PesquisadorSignatureModel(
           signature: signature,
-            paciente: widget.paciente,
+            pesquisador: widget.pesquisador,
             dateTimeAcceptance: DateTime.now(),
         );
 
-        Navigator.pop(context, signaturePaciente);
+        Navigator.pop(context, signaturePesquisador);
 
       } else {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('É necessário fornecer uma assinatura, para o aceite do termo de tratamento de dados pessoais.')));

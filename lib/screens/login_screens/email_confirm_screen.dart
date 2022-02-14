@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:vida_app/components/gradient_text.dart';
 import 'package:vida_app/helpers/validator_helpers.dart';
 import 'package:vida_app/services/firebase_auth_service.dart';
@@ -273,10 +274,13 @@ class _EmailConfirmScreenState extends State<EmailConfirmScreen> {
 
     setState(() {
       isEmailVerified = _firebaseAuthService.currentUser!.emailVerified;
+      print('Email Verified? $isEmailVerified');
     });
 
     if(isEmailVerified) {
       timerCheckEmail?.cancel();
+      await _firebaseAuthService.currentUser!.reload();
+      Phoenix.rebirth(context);
     }
 
   }

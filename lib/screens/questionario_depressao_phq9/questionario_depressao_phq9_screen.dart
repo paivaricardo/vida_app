@@ -161,8 +161,6 @@ class _QuestionarioDepressaoPHQ9ScreenState
                             // Registro das observações:
                             questionarioDepressaoPHQ9.observacoes = _observacoesQuestionarioPHQ9Controller.text;
 
-
-
                             // Registrar o pesquisador responsável
                             questionarioDepressaoPHQ9
                                     .pesquisadorResponsavel =

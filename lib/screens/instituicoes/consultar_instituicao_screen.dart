@@ -20,17 +20,17 @@ class ConsultarInstituicaoScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               const Padding(
-                padding: const EdgeInsets.only(top: 16.0),
+                padding: EdgeInsets.only(top: 16.0),
                 child: TitleText('Nome da instituição'),
               ),
               Text(instituicao.nomeInstituicao),
               const Padding(
-                padding: const EdgeInsets.only(top: 32.0),
+                padding: EdgeInsets.only(top: 32.0),
                 child: TitleText('Tipo de instituição'),
               ),
               Text(TipoInstiuicaoDomain.getTipoInstituicaoValue(instituicao.idTipoInstituicao)),
               const Padding(
-                padding: const EdgeInsets.only(top: 32.0),
+                padding: EdgeInsets.only(top: 32.0),
                 child: TitleText('Identificador'),
               ),
               Text(instituicao.uuidInstituicao),
