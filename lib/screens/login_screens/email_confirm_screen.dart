@@ -274,7 +274,6 @@ class _EmailConfirmScreenState extends State<EmailConfirmScreen> {
 
     setState(() {
       isEmailVerified = _firebaseAuthService.currentUser!.emailVerified;
-      print('Email Verified? $isEmailVerified');
     });
 
     if(isEmailVerified) {

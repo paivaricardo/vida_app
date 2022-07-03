@@ -62,6 +62,7 @@ class CadastroPacienteScreenState extends State<CadastroPacienteScreen>
   final _controllerProfissao = TextEditingController();
   final _controllerPesoAtual = TextEditingController();
   final _controllerAltura = TextEditingController();
+  final _controllerCartaoSUS = TextEditingController();
   final _controllerObservacoes = TextEditingController();
 
   // Controllers data de nascimento
@@ -536,6 +537,14 @@ class CadastroPacienteScreenState extends State<CadastroPacienteScreen>
             maxLength: 250,
             controller: _controllerMedicamento,
           ),
+        ),
+        TextFormField(
+          decoration: InputDecoration(
+            labelText: 'Cartão SUS',
+          ),
+          maxLength: 13,
+          keyboardType: TextInputType.number,
+          controller: _controllerCartaoSUS,
         ),
         TextFormField(
           decoration: InputDecoration(

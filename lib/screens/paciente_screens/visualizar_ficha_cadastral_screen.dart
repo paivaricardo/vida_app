@@ -11,9 +11,6 @@ class VisualizarFichaCadastralScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(paciente.dataInicioFumo);
-    print(paciente.dataRegistroPaciente);
-
     return Scaffold(
       appBar: AppBar(
         title: SelectableText('Visualizar ficha cadastral'),
@@ -216,6 +213,11 @@ class VisualizarFichaCadastralScreen extends StatelessWidget {
                   visible: paciente.fazUsoMedicamento,
                   child: SelectableText(paciente.medicamentos.toString()),
                 ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 12.0),
+                  child: TitleText('Cartão SUS'),
+                ),
+                SelectableText(paciente.cartaoSUS == null || paciente.cartaoSUS!.isEmpty ? 'Sem informação' : paciente.cartaoSUS!),
                 Padding(
                   padding: const EdgeInsets.only(top: 12.0),
                   child: TitleText('Observações'),

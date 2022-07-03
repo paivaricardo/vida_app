@@ -348,7 +348,6 @@ class _QuestionarioAnsiedadeScreenState
                             // Salvar o questionário e todos os seus registros no banco de dados Firestore Database
                             questionarioAnsiedadeAplicado.firestoreAdd();
 
-                            print(questionarioAnsiedadeAplicado.toString());
 
                             Navigator.pop(context);
                             Navigator.of(context).push(MaterialPageRoute(

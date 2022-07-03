@@ -60,6 +60,7 @@ class Paciente {
   DateTime? dataRegistroPaciente;
   bool fazUsoMedicamento;
   String medicamentos;
+  String? cartaoSUS;
   String? observacoes;
   bool icActive;
   bool icAcceptedDataTreatment;
@@ -88,6 +89,7 @@ class Paciente {
     required this.cigarrosDia,
     required this.fazUsoMedicamento,
     required this.medicamentos,
+    this.cartaoSUS,
     this.observacoes,
     this.icActive = true,
     this.icAcceptedDataTreatment = true,
@@ -118,6 +120,7 @@ class Paciente {
           dataRegistroPaciente: json['dataRegistroPaciente']?.toDate(),
           fazUsoMedicamento: json['fazUsoMedicamento'],
           medicamentos: json['medicamentos'],
+          cartaoSUS: json['cartaoSUS'],
           observacoes: json['observacoes'],
           icActive: json['icActive'],
           icAcceptedDataTreatment: json['icAcceptedDataTreatment'],
@@ -149,6 +152,7 @@ class Paciente {
       'dataInicioFumo': dataInicioFumo,
       'dataRegistroPaciente': dataRegistroPaciente,
       'fazUsoMedicamento': fazUsoMedicamento,
+      'cartaoSUS': cartaoSUS,
       'medicamentos': medicamentos.toUpperCase(),
       'observacoes': observacoes,
       'icActive': icActive,

@@ -151,8 +151,7 @@ class ResultadoQuestionarioTabagismoFagerstromScreen extends StatelessWidget {
                               '${questionario.questoes[index + 1]!.ordemQuestaoDomain}. ${questionario.questoes[index + 1]!.descricao}'),
                           Text(
                             '(${questionario.questoes[index + 1]!.pontuacao}) ${QuestaoQuestionarioDomain.questionarioTabagismoFagerstromQuestoesChoices[questionario.questoes[index + 1]!.ordemQuestaoDomain]![questionario.questoes[index + 1]!.pontuacao]}',
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
+                            style: TextStyle(fontWeight: FontWeight.bold),),
                         ],
                       ),
                     ),
@@ -173,7 +172,7 @@ class ResultadoQuestionarioTabagismoFagerstromScreen extends StatelessWidget {
                   DataCell(Text('Dependência moderada')),
                 ]),
                 DataRow(cells: <DataCell>[
-                  DataCell(Text('0 a 4')),
+                  DataCell(Text('8 a 10')),
                   DataCell(Text('Dependência grave')),
                 ]),
               ],

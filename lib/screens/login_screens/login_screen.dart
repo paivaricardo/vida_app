@@ -262,7 +262,7 @@ class _LoginScreenState extends State<LoginScreen> {
           _passwordController.text).timeout(
           Duration(seconds: 5), onTimeout: () {
         throw TimeoutException(
-            'Não há conexão com a Internet')
+            'Não há conexão com a Internet');
       });
 
       if (pesquisadorLogado == null) {

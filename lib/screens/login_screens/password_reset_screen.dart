@@ -228,8 +228,6 @@ class _PasswordResetScreenState extends State<PasswordResetScreen> {
         String returnResult = await _firebaseAuthService.firebaseResetPassword(
             _emailController.text.trim());
 
-        print('Erro : $returnResult');
-
         if (returnResult == 'Success') {
 
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('E-mail de reinício de senha enviado! Confira sua caixa de e-mail!')));
