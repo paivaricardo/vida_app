@@ -169,6 +169,13 @@ class Paciente {
     return pacientes.doc(uuid).set(toJson());
   }
 
+  Future<void> firestoreUpdate() {
+    CollectionReference pacientes =
+        FirebaseFirestore.instance.collection(firestoreCollectionName);
+
+    return pacientes.doc(uuid).set(toJson());
+  }
+
   double calculaIMC() {
     return ((pesoAtual / pow(altura, 2)) * pow(10, 2)).round() / pow(10, 2);
   }

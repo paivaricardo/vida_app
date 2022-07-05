@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:vida_app/components/title_text.dart';
 import 'package:vida_app/helpers/datetime_helper.dart';
 import 'package:vida_app/models/paciente_model.dart';
+import 'package:vida_app/screens/paciente_screens/editar_paciente_screen.dart';
 
 class VisualizarFichaCadastralScreen extends StatelessWidget {
   final Paciente paciente;
@@ -217,7 +218,10 @@ class VisualizarFichaCadastralScreen extends StatelessWidget {
                   padding: const EdgeInsets.only(top: 12.0),
                   child: TitleText('Cartão SUS'),
                 ),
-                SelectableText(paciente.cartaoSUS == null || paciente.cartaoSUS!.isEmpty ? 'Sem informação' : paciente.cartaoSUS!),
+                SelectableText(
+                    paciente.cartaoSUS == null || paciente.cartaoSUS!.isEmpty
+                        ? 'Sem informação'
+                        : paciente.cartaoSUS!),
                 Padding(
                   padding: const EdgeInsets.only(top: 12.0),
                   child: TitleText('Observações'),
@@ -231,6 +235,33 @@ class VisualizarFichaCadastralScreen extends StatelessWidget {
                     ? DateTimeHelper.retrieveFormattedDateStringBR(
                         paciente.dataRegistroPaciente)
                     : 'Sem informação.'),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: <Widget>[
+                    ElevatedButton.icon(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      icon: Icon(Icons.arrow_back_rounded),
+                      label: Text('Retornar'),
+                      style: ButtonStyle(
+                        backgroundColor:
+                            MaterialStateProperty.all<Color>(Colors.grey),
+                      ),
+                    ),
+                    ElevatedButton.icon(
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => EditarPacienteScreen(
+                                        paciente: paciente,
+                                      )));
+                        },
+                        icon: Icon(Icons.edit),
+                        label: Text('Editar')),
+                  ],
+                )
               ]),
         ),
       ),

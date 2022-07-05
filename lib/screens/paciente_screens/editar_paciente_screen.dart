@@ -12,37 +12,39 @@ import 'package:vida_app/models/paciente_model.dart';
 import 'package:vida_app/models/paciente_signature_model.dart';
 import 'package:vida_app/models/pesquisador_model.dart';
 
-class CadastroPacienteScreen extends StatefulWidget {
-  const CadastroPacienteScreen({Key? key}) : super(key: key);
+class EditarPacienteScreen extends StatefulWidget {
+  Paciente paciente;
+
+  EditarPacienteScreen({required this.paciente, Key? key}) : super(key: key);
 
   @override
-  CadastroPacienteScreenState createState() => CadastroPacienteScreenState();
+  EditarPacienteScreenState createState() => EditarPacienteScreenState();
 }
 
-class CadastroPacienteScreenState extends State<CadastroPacienteScreen>
+class EditarPacienteScreenState extends State<EditarPacienteScreen>
     with InputValidationMixin {
   // Uuid do paciente
-  var generatedUuid = Uuid().v4();
+  late String patientUuid;
 
   // Form key
   final _formKey = GlobalKey<FormState>();
 
   // Member variables
-  String? radioValueSexo = 'M';
-  bool fumante = false;
-  bool fazUsoMedicamento = false;
-  bool conhecePic = false;
+  late String? radioValueSexo;
+  late bool fumante;
+  late bool fazUsoMedicamento;
+  late bool conhecePic;
 
   // Pics conhecidas
-  bool conheceReflexologiaPodal = false;
-  bool conheceAromaterapia = false;
-  bool conheceAuriculoTerapia = false;
-  bool conheceCromoterapia = false;
+  late bool conheceReflexologiaPodal;
+  late bool conheceAromaterapia;
+  late bool conheceAuriculoTerapia;
+  late bool conheceCromoterapia;
 
   // Problemas apresentados
-  bool apresentaAnsiedade = false;
-  bool apresentaDepressao = false;
-  bool apresentaDores = false;
+  late bool apresentaAnsiedade;
+  late bool apresentaDepressao;
+  late bool apresentaDores;
 
   // Dropdown options
   List<String> listaEscolaridade =
@@ -54,8 +56,8 @@ class CadastroPacienteScreenState extends State<CadastroPacienteScreen>
   ];
 
   // Dropdown variables
-  late String? escolaridade = listaEscolaridade[0];
-  late String? frequenciaFumo = listaFrequenciaFumo[0];
+  late String? escolaridade;
+  late String? frequenciaFumo;
 
   // Controllers
   final _controllerNome = TextEditingController();
@@ -76,15 +78,45 @@ class CadastroPacienteScreenState extends State<CadastroPacienteScreen>
   final _controllerDataInicioFumo = TextEditingController();
   final _controllerMedicamento = TextEditingController();
 
-  // Assinatura e aceitação do termo de tratamento de dados pessoais
-  bool aceitaTratamento = false;
-  PacienteSignatureModel? pacienteSignature;
+  @override
+  void initState() {
+    patientUuid = widget.paciente.uuid!;
+    escolaridade = widget.paciente.escolaridade;
+    radioValueSexo = widget.paciente.sexo;
+    fumante = widget.paciente.fumante;
+    frequenciaFumo = fumante ? widget.paciente.frequenciaFumo : listaFrequenciaFumo[0];
+    fazUsoMedicamento = widget.paciente.fazUsoMedicamento;
+    conhecePic = widget.paciente.conhecePic;
+    conheceReflexologiaPodal = widget.paciente.quaisPicConhece['Reflexologia podal']!;
+    conheceAromaterapia = widget.paciente.quaisPicConhece['Aromaterapia']!;
+    conheceAuriculoTerapia = widget.paciente.quaisPicConhece['Auriculoterapia']!;
+    conheceCromoterapia = widget.paciente.quaisPicConhece['Cromoterapia']!;
+    apresentaAnsiedade = widget.paciente.apresentaAnsiedade;
+    apresentaDepressao = widget.paciente.apresentaDepressao;
+    apresentaDores = widget.paciente.apresentaDor;
+
+    _controllerNome.text = widget.paciente.nome;
+    _controllerDiaNascimento.text = widget.paciente.dataNascimento.day.toString();
+    _controllerMesNascimento.text = widget.paciente.dataNascimento.month.toString();
+    _controllerAnoNascimento.text = widget.paciente.dataNascimento.year.toString();
+    _controllerProfissao.text = widget.paciente.profissao;
+    _controllerPesoAtual.text = widget.paciente.pesoAtual.toString();
+    _controllerAltura.text = widget.paciente.pesoAtual.toString();
+    _controllerCartaoSUS.text = widget.paciente.cartaoSUS!;
+    _controllerObservacoes.text = widget.paciente.observacoes!;
+    _controllerLocalDor.text = widget.paciente.localDor;
+    _controllerCigarrosDia.text = widget.paciente.cigarrosDia.toString();
+    _controllerDataInicioFumo.text = widget.paciente.dataInicioFumo.toString();
+    _controllerMedicamento.text = widget.paciente.medicamentos;
+
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Cadastro de paciente'),
+        title: Text('Edição de paciente'),
       ),
       body: SingleChildScrollView(
         child: Container(
@@ -580,8 +612,8 @@ class CadastroPacienteScreenState extends State<CadastroPacienteScreen>
                       try {
                         // Mostrar caixa de diálogo de aprovação de tratamento de dados
 
-                        Paciente pacienteCreated = Paciente(
-                          uuid: generatedUuid,
+                        Paciente pacienteEdited = Paciente(
+                          uuid: widget.paciente.uuid,
                           nome: _controllerNome.text.toUpperCase(),
                           dataNascimento: DateTime(
                             int.parse(_controllerAnoNascimento.text),
@@ -635,63 +667,30 @@ class CadastroPacienteScreenState extends State<CadastroPacienteScreen>
                           pesquisadorCadastrante: pesquisadorCadastrante,
                         );
 
-                        pacienteSignature = await showDialog(
-                            context: context,
-                            builder: (context) {
-                              return StatefulBuilder(
-                                  builder: (context, setState) {
-                                return DialogAssinaturaTermoTratamentoDados(
-                                  paciente:
-                                      pacienteCreated
-                                );
-                              });
-                            });
-
-                        if (pacienteSignature == null) {
-                          aceitaTratamento = false;
-                        } else {
-                          aceitaTratamento = true;
-                        }
-
-                        if (aceitaTratamento) {
-
-                          pacienteSignature!.firestoreAdd();
-                          pacienteCreated.firestoreAdd();
+                          pacienteEdited.firestoreAdd();
 
                           // Firebase Logs info
-                          LogModel logPacienteCreated = LogModel(
+                          LogModel logPacienteEdited = LogModel(
                             dateTimeLog : DateTime.now(),
-                              eventType : 'CREATE',
-                            comments: 'Paciente ${pacienteCreated.nome} - uuid ${pacienteCreated.uuid} - cadastrado por ${pesquisadorCadastrante.nomePesquisador} - ${pesquisadorCadastrante.uuidPesquisador}',
-                            additionalInfo: { 'pacienteCreated' : pacienteCreated.toJson() }
-                          );
-                          // Firebase Logs info
-                          LogModel logPacientConsent = LogModel(
-                            dateTimeLog : DateTime.now(),
-                              eventType : 'CONSENT_DATA',
-                            comments: 'Paciente ${pacienteCreated.nome} - uuid ${pacienteCreated.uuid} - consentiu com tratamento de dados.',
+                              eventType : 'EDIT',
+                            comments: 'Paciente ${pacienteEdited.nome} - uuid ${pacienteEdited.uuid} - editado por ${pesquisadorCadastrante.nomePesquisador} - ${pesquisadorCadastrante.uuidPesquisador}',
+                            additionalInfo: { 'pacienteBeforeEditing' : widget.paciente.toJson(), 'pacienteAfterEditing' : pacienteEdited.toJson() }
                           );
 
-                          logPacienteCreated.firestoreAdd();
-                          logPacientConsent.firestoreAdd();
+                          logPacienteEdited.firestoreAdd();
 
                           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                               content:
-                                  Text('Paciente cadastrado com sucesso!')));
+                                  Text('Dados do paciente edittados com sucesso!')));
 
                           Navigator.pop(context);
-                        } else {
-                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                              content: Text(
-                                  'Não é possível o cadastro e participação do paciente sem a leitura e assinatura do termo de aceite para tratamento de dados pessoais')));
-                        }
                       } catch (error, stacktrace) {
                         debugPrint(error.toString());
                         print(stacktrace.toString());
 
                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                             content: Text(
-                                'Houve um erro desconhecido ao cadastrar o paciente.')));
+                                'Houve um erro desconhecido ao editar os dados do paciente.')));
                       }
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -700,7 +699,7 @@ class CadastroPacienteScreenState extends State<CadastroPacienteScreen>
                     }
                   },
                   icon: Icon(Icons.save),
-                  label: Text('Cadastrar')),
+                  label: Text('Salvar')),
             ],
           ),
         )
